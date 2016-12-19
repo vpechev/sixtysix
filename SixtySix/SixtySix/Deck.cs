@@ -10,6 +10,10 @@ namespace SixtySix
     {
         public List<Card> Cards {  get; set; }
         public List<Card> thrownCards { get; set; }
+        public CardSuit TrumpSuit { get; set; }
+
+        public bool HasOpenedCard { get; set; }
+
         public Deck()
         {
             Cards = new List<Card>(Constants.DECK_COUNT);            

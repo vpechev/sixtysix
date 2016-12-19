@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SixtySix
 {
-    public class AIMovementUtil
+    public enum CardSuit
     {
-        public static void MakeTurn(Player player, Deck deck)
-        {
-
-        }
+        CLUB = 1,
+        DIAMOND = 2,
+        HEART = 3,
+        SPADE = 4
     }
 }

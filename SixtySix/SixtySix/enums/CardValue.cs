@@ -8,10 +8,10 @@ namespace SixtySix
     public enum CardValue
     {
         NINE = 0,
-        Jack = 2,
-        Queen = 3,
-        King = 4,
+        JACK = 2,
+        QUEEN = 3,
+        KING = 4,
         TEN = 10,
-        Ace = 11,
+        ACE = 11,
     }
 }

@@ -12,7 +12,7 @@ namespace SixtySix
         public CardValue Value { get; set; }
 
         public override string ToString(){            
-            return String.Format("{0} {1}", Value.ToString(), Suit.ToString());
+            return String.Format("{0} {1} ", Value.ToString(), Suit.ToString());
         }
 
         public override bool Equals(object obj)

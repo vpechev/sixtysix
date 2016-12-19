@@ -41,17 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AIMovementUtil.cs" />
+    <Compile Include="movementUtil\AIMovementUtil.cs" />
     <Compile Include="Card.cs" />
-    <Compile Include="CardValue.cs" />
+    <Compile Include="enums\CardValue.cs" />
     <Compile Include="CardsDeckUtil.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="constants\Constants.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="GameEngine.cs" />
+    <Compile Include="movementUtil\InputPlayerMovementUtil.cs" />
+    <Compile Include="movementUtil\MovementUtil.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CardSuit.cs" />
+    <Compile Include="enums\CardSuit.cs" />
     <Compile Include="SixtySixUtil.cs" />
   </ItemGroup>
   <ItemGroup>

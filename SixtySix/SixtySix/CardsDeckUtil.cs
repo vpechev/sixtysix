@@ -11,7 +11,6 @@ namespace SixtySix
         public static Deck InitializeDeck() {
             var deck = new Deck();
 
-            int cardIndex = 0;
             var suits = Enum.GetValues(typeof(CardSuit)).Cast<CardSuit>();
             var cardValues = Enum.GetValues(typeof(CardValue)).Cast<CardValue>();
 
@@ -19,7 +18,7 @@ namespace SixtySix
             {
                 foreach (var value in cardValues)
                 {
-                    deck.Cards[cardIndex++] = new Card() { Suit = suit, Value = value };
+                    deck.Cards.Add(new Card() { Suit = suit, Value = value });
                 }
             }
             
@@ -55,6 +54,20 @@ namespace SixtySix
                 Console.WriteLine("FAIL SPLITTING. DECK CARDS COUNT IS: {0}", deck.Cards.Count);
             } 
         }
-        
+
+
+        public static void CollectCardsInDeck(Deck deck, Player player1, Player player2)
+        {
+            deck.Cards.AddRange(deck.thrownCards);
+            deck.Cards.AddRange(player1.ThrownCards);
+            deck.Cards.AddRange(player1.Cards);
+            deck.Cards.AddRange(player2.ThrownCards);
+            deck.Cards.AddRange(player2.Cards);
+
+            if (deck.Cards.Count() != Constants.DECK_COUNT)
+            {
+                throw new Exception("The number of cards in deck should be exactly 24.\nThrown by method CollectCardsInDeck.");
+            }
+        }
     }
 }

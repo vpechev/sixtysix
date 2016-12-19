@@ -10,7 +10,7 @@ namespace SixtySix
     {
         static void Main(string[] args)
         {
-            
+            GameEngine.PlaySixtySix();
             Console.ReadLine();
         }
     }
