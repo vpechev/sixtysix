@@ -13,6 +13,7 @@ namespace SixtySix
             var deck = CardsDeckUtil.InitializeDeck();
             var player1 = new Player(false); //human player
             var player2 = new Player(true); //AI player
+            player1.HasWonLastDeal = true;
 
             CardsDeckUtil.shuffleDeck(deck); //we first shuffle the deck
             do
@@ -21,12 +22,16 @@ namespace SixtySix
                 {
                     var splitIndex = MovementUtil.GetDeckSplittingIndex(player2);
                     CardsDeckUtil.splitDeck(deck, splitIndex); //one of the players should split the deck
+                    player1.HasWonLastHand = true;
+                    player2.HasWonLastHand = false;
                     PlayOneDeal(deck, player1, player2);
                 }
                 else if (player2.HasWonLastDeal)
                 {
                     var splitIndex = MovementUtil.GetDeckSplittingIndex(player1);
                     CardsDeckUtil.splitDeck(deck, splitIndex); //one of the players should split the deck
+                    player2.HasWonLastHand = true;
+                    player1.HasWonLastHand = false;
                     PlayOneDeal(deck, player2, player1);
                 } 
                 else 
@@ -52,8 +57,12 @@ namespace SixtySix
             SixtySixUtil.DealCards(deck, player1, player2);
             do
             {
-                Console.WriteLine("TRUMP: {0}!!! {1} cards in the deck.", deck.Cards.Last(), deck.Cards.Count());
-                if (player1.IsOnTurn) {
+                Console.WriteLine("TRUMP: {0}!!! {1} cards in the deck.", deck.Cards.Count() > 0 ? deck.Cards.Last().ToString() : deck.TrumpSuit.ToString(), deck.Cards.Count());
+                Console.WriteLine("-" + player1.ToString() + " has " + player1.Score + " points");
+                Console.WriteLine("-" + player2.ToString() + " has " + player2.Score + " points");
+                Console.WriteLine();
+
+                if (player1.HasWonLastHand) {
                     MakeTurn(player1, player2, deck);
                     
                     if (SixtySixUtil.IsSixtySixReached(player1, player2))
@@ -61,7 +70,7 @@ namespace SixtySix
                         break;
                     }
                 }
-                else
+                else if (player2.HasWonLastHand)
                 {
                     MakeTurn(player2, player1, deck);
 
@@ -79,22 +88,6 @@ namespace SixtySix
 
         private static void MakeTurn(Player player1, Player player2, Deck deck)
         {
-            //check for swapping opened card and swap if is allowed
-            if (SixtySixUtil.CanSwap(player1.Cards, deck))
-            {
-                SixtySixUtil.SwapOpenedCard(player1, deck);
-            }
-
-            //Check for additional point -> (20 or 40)
-            //TODO Idea for modification: Player choose if he wants to call his announce. If has more than one announce can choose which one wants to play.
-            if (SixtySixUtil.HasForty(player1.Cards, deck))
-            {
-                SixtySixUtil.CallForty(player1);
-            } else if (SixtySixUtil.HasTwenty(player1.Cards, deck))
-            {
-                SixtySixUtil.CallTwenty(player1);
-            }
-
             //give card
             var card = MovementUtil.MakeTurn(player1, player2, deck, null);
             var otherCard = MovementUtil.MakeTurn(player2, player1, deck, card);
@@ -105,6 +98,8 @@ namespace SixtySix
             {
                 Console.WriteLine("Winning card {0}", card);
                 player1.Score += handScore;
+                player1.HasWonLastHand = true;
+                player2.HasWonLastHand = false;
                 SixtySixUtil.DrawCard(player1, deck);
                 SixtySixUtil.DrawCard(player2, deck);
             }
@@ -112,6 +107,8 @@ namespace SixtySix
             {
                 Console.WriteLine("Winning card {0}", otherCard);
                 player2.Score += handScore;
+                player2.HasWonLastHand = true;
+                player1.HasWonLastHand = false;
                 SixtySixUtil.DrawCard(player2, deck);
                 SixtySixUtil.DrawCard(player1, deck);
             }

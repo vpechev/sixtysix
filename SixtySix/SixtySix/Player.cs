@@ -19,8 +19,8 @@ namespace SixtySix
         public int Score { get; set; }
         public int WinsCount { get; set; }
         public bool HasWonLastDeal { get; set; }
+        public bool HasWonLastHand { get; set; }
         public bool IsAIPlayer { get; set; }
-        public bool IsOnTurn { get; set; }
         public List<Card> ThrownCards { get; set; }
 
         public Card GiveCard(Card card)

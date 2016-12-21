@@ -10,9 +10,6 @@ namespace SixtySix
     {
         public static Card MakeTurn(Player player, Player other, Deck deck, Card playedFromOther=null)
         {
-            player.IsOnTurn = false;
-            other.IsOnTurn = true;
-
             if (player.IsAIPlayer)
                 return AIMovementUtil.MakeTurn(player, deck, playedFromOther);
             else

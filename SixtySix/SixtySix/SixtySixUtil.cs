@@ -195,7 +195,7 @@ namespace SixtySix
         //Closing opportunity methods
         public static bool CanClose(Player player, Deck deck)
         {
-            return player.IsOnTurn && deck.Cards.Count() > 2 && deck.HasOpenedCard;
+            return player.HasWonLastHand && deck.Cards.Count() > 2 && deck.HasOpenedCard;
         }
 
         public static void Close(Deck deck)
@@ -257,7 +257,7 @@ namespace SixtySix
 
         public static bool IsSixtySixReached(Player player, Player other)
         {
-            if (player.IsOnTurn && player.Score >= Constants.TOTAL_SCORE)
+            if (player.HasWonLastHand && player.Score >= Constants.TOTAL_SCORE)
             {
                 player.WinsCount++;
                 player.HasWonLastDeal = true;

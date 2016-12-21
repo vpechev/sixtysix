@@ -16,13 +16,24 @@ namespace SixtySix
                 Console.WriteLine("Other player played: " + playedFromOther);
             }
             Console.WriteLine("Your Hand: " + player.ToStringPlayerCards());
-            Console.WriteLine("Ender the choosen card in format <<<cardValue cardSuit>>>");
-            String input = Console.ReadLine();
-            var parts = input.Split(null);
-            var value = ParseInputToCardValue(parts[0]);
-            var suit = ParseInputToCardSuit(parts[1]);
+            Card card = null;
+            do
+            {
+                Console.WriteLine("Ender the choosen card in format <<<cardValue cardSuit>>>");
+                String input = Console.ReadLine();
+                var parts = input.Split(null);
+                var value = ParseInputToCardValue(parts[0]);
+                var suit = ParseInputToCardSuit(parts[1]);
 
-            var card = new Card() { Value = value, Suit = suit };
+                card = new Card() { Value = value, Suit = suit };
+            } while (card == null || card.Value == 0 || card.Suit == 0);
+
+            if(SixtySixUtil.HasForty(player.Cards, card, deck)) {
+                SixtySixUtil.CallForty(player);
+            } else if(SixtySixUtil.HasTwenty(player.Cards, card, deck)) {
+                SixtySixUtil.CallTwenty(player);
+            }
+            
             player.GiveCard(card);
 
             return card;
