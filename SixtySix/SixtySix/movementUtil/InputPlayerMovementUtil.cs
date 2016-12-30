@@ -26,7 +26,7 @@ namespace SixtySix
                 var suit = ParseInputToCardSuit(parts[1]);
 
                 card = new Card() { Value = value, Suit = suit };
-            } while (card == null || card.Value == 0 || card.Suit == 0);
+            } while (card == null || card.Suit == 0);
 
             if(SixtySixUtil.HasForty(player.Cards, card, deck)) {
                 SixtySixUtil.CallForty(player);
@@ -43,8 +43,10 @@ namespace SixtySix
         {
             switch (input)
             {
-                case "9" : return CardValue.NINE;
+                case "9": return CardValue.NINE; 
+                case "nine" : return CardValue.NINE;
                 case "10" : return CardValue.TEN;
+                case "ten" : return CardValue.TEN;
                 case "jack": return CardValue.JACK;
                 case "queen": return CardValue.QUEEN;
                 case "king": return CardValue.KING;

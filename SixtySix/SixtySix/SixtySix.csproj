@@ -41,20 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MCTSEngine\MCTSEngine.cs" />
     <Compile Include="movementUtil\AIMovementUtil.cs" />
-    <Compile Include="Card.cs" />
+    <Compile Include="game\Card.cs" />
     <Compile Include="enums\CardValue.cs" />
-    <Compile Include="CardsDeckUtil.cs" />
+    <Compile Include="game\CardsDeckUtil.cs" />
     <Compile Include="constants\Constants.cs" />
-    <Compile Include="Deck.cs" />
-    <Compile Include="GameEngine.cs" />
+    <Compile Include="game\Deck.cs" />
+    <Compile Include="game\GameEngine.cs" />
     <Compile Include="movementUtil\InputPlayerMovementUtil.cs" />
     <Compile Include="movementUtil\MovementUtil.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="MCTSEngine\Node.cs" />
+    <Compile Include="player\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="enums\CardSuit.cs" />
-    <Compile Include="SixtySixUtil.cs" />
+    <Compile Include="game\SixtySixUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

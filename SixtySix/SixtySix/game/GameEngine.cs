@@ -11,13 +11,20 @@ namespace SixtySix
         public static Player PlaySixtySix()
         {
             var deck = CardsDeckUtil.InitializeDeck();
-            var player1 = new Player(false); //human player
+            var player1 = new Player(true); //human player
             var player2 = new Player(true); //AI player
             player1.HasWonLastDeal = true;
 
             CardsDeckUtil.shuffleDeck(deck); //we first shuffle the deck
             do
             {
+                player1.Score = 0;
+                player2.Score = 0;
+                player1.Cards = new List<Card>();
+                player2.Cards = new List<Card>();
+                player1.ThrownCards = new List<Card>();
+                player2.ThrownCards = new List<Card>();
+                
                 if (player1.HasWonLastDeal)
                 {
                     var splitIndex = MovementUtil.GetDeckSplittingIndex(player2);
@@ -41,10 +48,15 @@ namespace SixtySix
             }
             while (player1.WinsCount < Constants.TOTAL_PLAYS_FOR_WIN && player2.WinsCount < Constants.TOTAL_PLAYS_FOR_WIN);
 
-            if (player1.WinsCount >= Constants.TOTAL_PLAYS_FOR_WIN)
+            if (player1.WinsCount >= Constants.TOTAL_PLAYS_FOR_WIN){
+                Console.WriteLine("You has won!!! Result is: {0} to {1}.", player1.WinsCount, player2.WinsCount);
                 return player1;
+            }
             else
+            {
+                Console.WriteLine("AI player has won!!! Result is: {0} to {1}.", player2.WinsCount, player1.WinsCount);
                 return player2;
+            }
         }
 
         /*
@@ -55,8 +67,10 @@ namespace SixtySix
         {
             //we have to deal the cards.
             SixtySixUtil.DealCards(deck, player1, player2);
+            int turnNumber = 1; 
             do
             {
+                Console.WriteLine("TURN: {0}", turnNumber++);
                 Console.WriteLine("TRUMP: {0}!!! {1} cards in the deck.", deck.Cards.Count() > 0 ? deck.Cards.Last().ToString() : deck.TrumpSuit.ToString(), deck.Cards.Count());
                 Console.WriteLine("-" + player1.ToString() + " has " + player1.Score + " points");
                 Console.WriteLine("-" + player2.ToString() + " has " + player2.Score + " points");
@@ -84,6 +98,7 @@ namespace SixtySix
             } while (player1.Cards.Count() > 0 && player2.Cards.Count() > 0);
 
             CardsDeckUtil.CollectCardsInDeck(deck, player1, player2);
+            Console.Clear();
         }
 
         private static void MakeTurn(Player player1, Player player2, Deck deck)

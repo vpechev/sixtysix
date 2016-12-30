@@ -58,11 +58,30 @@ namespace SixtySix
 
         public static void CollectCardsInDeck(Deck deck, Player player1, Player player2)
         {
-            deck.Cards.AddRange(deck.thrownCards);
-            deck.Cards.AddRange(player1.ThrownCards);
-            deck.Cards.AddRange(player1.Cards);
-            deck.Cards.AddRange(player2.ThrownCards);
-            deck.Cards.AddRange(player2.Cards);
+            if (deck.thrownCards != null)
+            {
+                deck.Cards.AddRange(deck.thrownCards);
+            }
+
+            if (player1.ThrownCards != null)
+            {
+                deck.Cards.AddRange(player1.ThrownCards);
+            }
+            
+            if (player1.Cards != null)
+            {
+                deck.Cards.AddRange(player1.Cards);
+            }
+
+            if (player2.ThrownCards != null)
+            {
+                deck.Cards.AddRange(player2.ThrownCards);
+            }
+
+            if (player2.Cards != null)
+            {
+                deck.Cards.AddRange(player2.Cards);
+            }
 
             if (deck.Cards.Count() != Constants.DECK_COUNT)
             {

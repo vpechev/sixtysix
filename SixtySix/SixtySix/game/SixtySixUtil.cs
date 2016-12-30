@@ -171,9 +171,14 @@ namespace SixtySix
         public static bool CanSwap(List<Card> handCards, Deck deck)
         {
             // last card is always deck.Cards[deck.Cards.Count() - 1]
+            if (deck.Cards.Count() < 2)
+            {
+                return false;
+            }
+
             var lastCard = deck.Cards[deck.Cards.Count() - 1];
             var hasATrumpNine = handCards.FirstOrDefault(x => x.Value == CardValue.NINE && x.Suit == deck.TrumpSuit) != null;
-            if (deck.Cards.Count() > 2 && hasATrumpNine)
+            if (hasATrumpNine)
                 return true;
 
             return false;
