@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SixtySix.enums;
+using SixtySix.RuleBasedEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +12,20 @@ namespace SixtySix
     {
         public static Card MakeTurn(Player player, Deck deck, Card playedFromOther=null)
         {
-            var rand = new Random();
-            //TODO This line should be replaced with smarter move (choosing card)
-            var card = player.Cards[rand.Next(0, player.Cards.Count)];
+            Card card = null;
+            if (player.PlayStrategy == PlayStrategy.MCTS)
+            {
+                card = GiveMCTSBasedCard(player, deck, playedFromOther);
+            }
+            else if (player.PlayStrategy == PlayStrategy.RuleBased)
+            {
+                card = RuleBasedMovementUtil.GiveRuleBasedCard(player, deck, playedFromOther);
+            }
+            else if (player.PlayStrategy == PlayStrategy.Random)
+            {
+                card = GiveRandomBasedCard(player, deck, playedFromOther);
+            }
+            
             Console.WriteLine("AI Hand: " + player.ToStringPlayerCards());
             Console.WriteLine("AI has played: {0}", card);
             player.GiveCard(card);
@@ -35,7 +48,21 @@ namespace SixtySix
             }
 
             return card;
-            //return new Card() { Value = 0, Suit = 0 };
+        }
+
+        private static Card GiveRandomBasedCard(Player player, Deck deck, Card playedFromOther = null)
+        {
+            var rand = new Random();
+            var card = player.Cards[rand.Next(0, player.Cards.Count)];
+
+            return card;
+        }
+
+        
+
+        private static Card GiveMCTSBasedCard(Player player, Deck deck, Card playedFromOther = null)
+        {
+            return null;
         }
 
         public static int GetDeckSplittingIndex()

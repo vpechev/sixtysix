@@ -14,8 +14,6 @@ namespace SixtySix
          */
         public static Card Select(Node current, Deck deck, Player player)
         {
-            Card choosenCard = null;
-
             while (!current.IsTerminal)
             {
                 List<Card> validMoves = current.Cards;
@@ -26,7 +24,7 @@ namespace SixtySix
                     current = BestChildUCB(current, 1.44);
             }
 
-            return choosenCard;
+            return current.ChoosenCard;
         }
 
         /*
@@ -133,17 +131,41 @@ namespace SixtySix
             var playerCards = node.Cards;
             var rootNode = new Node();
 
+            
             foreach (var card in playerCards)
             {
-                rootNode.Children.Add(new Node()
+                var availableCardsForOpponent = CardsDeckUtil.InitializeDeck().Cards; //all cards
+                availableCardsForOpponent.Remove(deck.Cards.Last());      // - deck.OpenedCard
+                player.Cards.ForEach(x=> availableCardsForOpponent.Remove(x) ); //- current player cards 
+                deck.ThrownCards.ForEach(x=> availableCardsForOpponent.Remove(x) ); //- deck.ThrownCards 
+                
+                var currentNode = new Node()
                 {
                     Cards = playerCards,
                     ChoosenCard = card,
                     OpenedDeckCard = deck.Cards.Last(),
-                    ThrownFromPlayerCards = player.ThrownCards
-                });
+                    ThrownFromPlayerCards = player.ThrownCards,
+                    CanBePlayedFromOpponent = availableCardsForOpponent
+                };
+                rootNode.Children.Add(currentNode);
+                GenerateSubTree(currentNode, player);
             }
+        }
 
+        private static void GenerateSubTree(Node node, Player player)
+        {
+            //current card played from the player
+            player.Cards.Remove(node.ChoosenCard); //we should take a card
+
+            //card played from the opponent
+            //------------------------------------> opponent should give a card
+
+            //take card from the available to fill missing in player hand
+            var newCard = node.CanBePlayedFromOpponent[0];
+            node.CanBePlayedFromOpponent.Remove(newCard);
+            player.Cards.Add(newCard);
+            
+            GenerateSubTree(node, player);
         }
 
         private static Node BestChildUCB(Node current, double C)

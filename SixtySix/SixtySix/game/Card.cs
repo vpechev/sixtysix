@@ -15,6 +15,17 @@ namespace SixtySix
             return String.Format("{0} {1} ", Value.ToString(), Suit.ToString());
         }
 
+        public Card()
+        {
+
+        }
+
+        public Card(CardValue value, CardSuit suit)
+        {
+            this.Suit = suit;
+            this.Value = value;
+        }
+
         public override bool Equals(object obj)
         {
             var otherCard = obj as Card;

@@ -19,6 +19,8 @@ namespace SixtySix
         public Card OpenedDeckCard { get; set; }
         public bool IsTerminal { get; set; }
 
+        public List<Card> CanBePlayedFromOpponent { get; set; }
+
         public int Value { get; set; }
         public int VisitsCount { get; set; }
         public List<Node> Children { get; set; }

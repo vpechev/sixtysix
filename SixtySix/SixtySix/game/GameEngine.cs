@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SixtySix.enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,9 @@ namespace SixtySix
         {
             var deck = CardsDeckUtil.InitializeDeck();
             var player1 = new Player(true); //human player
-            var player2 = new Player(true); //AI player
+            var player2 = new Player(true, PlayStrategy.Random); //random AI player
+            //var player2 = new Player(true, PlayStrategy.RuleBased); //random AI player
+            //var player2 = new Player(true, PlayStrategy.MCTS); //random AI player
             player1.HasWonLastDeal = true;
 
             CardsDeckUtil.shuffleDeck(deck); //we first shuffle the deck
@@ -107,6 +110,9 @@ namespace SixtySix
             var card = MovementUtil.MakeTurn(player1, player2, deck, null);
             var otherCard = MovementUtil.MakeTurn(player2, player1, deck, card);
             var handScore = (int)card.Value + (int)otherCard.Value;
+
+            deck.ThrownCards.Add(card);
+            deck.ThrownCards.Add(otherCard);
 
             // player1 plays first, so if first card wins, then the first player wins
             if (SixtySixUtil.WinsFirstCard(card, otherCard, deck.TrumpSuit))

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SixtySix.enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,12 +16,18 @@ namespace SixtySix
             IsAIPlayer = isAIPlayer;
         }
 
+        public Player(bool isAIPlayer, PlayStrategy playStrategy) : this(isAIPlayer)
+        {
+            PlayStrategy = playStrategy;
+        }
+
         public List<Card> Cards { get; set; }
         public int Score { get; set; }
         public int WinsCount { get; set; }
         public bool HasWonLastDeal { get; set; }
         public bool HasWonLastHand { get; set; }
         public bool IsAIPlayer { get; set; }
+        public PlayStrategy PlayStrategy { get; set; }
         public List<Card> ThrownCards { get; set; }
 
         public Card GiveCard(Card card)

@@ -206,7 +206,7 @@ namespace SixtySix
         public static void Close(Deck deck)
         {
             deck.HasOpenedCard = false;
-            deck.thrownCards.AddRange(deck.Cards);
+            deck.ThrownCards.AddRange(deck.Cards);
             deck.Cards.Clear();
         }
 
