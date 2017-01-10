@@ -12,8 +12,12 @@ namespace SixtySix
          * Start from the root R and select successive child nodes down to the
          * leaf node L. We have to choose most promising moves 
          */
-        public static Card Select(Node current, Deck deck, Player player)
+        public static Card Select(Deck deck, Player player, Card playedFromOther=null)
         {
+            Node current = new Node()
+            {
+                
+            };
             while (!current.IsTerminal)
             {
                 List<Card> validMoves = current.Cards;

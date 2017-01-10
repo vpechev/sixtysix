@@ -14,6 +14,8 @@ namespace SixtySix
 
         public bool HasOpenedCard { get; set; }
 
+        public bool IsClosed { get; set; }
+
         public Deck()
         {
             Cards = new List<Card>(Constants.DECK_COUNT);            

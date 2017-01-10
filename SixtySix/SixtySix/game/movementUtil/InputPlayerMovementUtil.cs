@@ -19,24 +19,31 @@ namespace SixtySix
             Card card = null;
             do
             {
-                Console.WriteLine("Ender the choosen card in format <<<cardValue cardSuit>>>");
-                String input = Console.ReadLine();
-                var parts = input.Split(null);
-                var value = ParseInputToCardValue(parts[0]);
-                var suit = ParseInputToCardSuit(parts[1]);
-
-                card = new Card() { Value = value, Suit = suit };
+                card = ParseInputCard();
             } while (card == null || card.Suit == 0);
 
-            if(SixtySixUtil.HasForty(player.Cards, card, deck)) {
-                SixtySixUtil.CallForty(player);
-            } else if(SixtySixUtil.HasTwenty(player.Cards, card, deck)) {
-                SixtySixUtil.CallTwenty(player);
+            if ((deck.Cards.Count == 0 || deck.IsClosed) && playedFromOther != null && !card.Suit.Equals(playedFromOther.Suit) && SixtySixUtil.HasAnsweringCard(player, playedFromOther))
+            {
+                while(!card.Suit.Equals(playedFromOther.Suit)){
+                    Console.WriteLine("You HAVE to answer.");
+                    card = ParseInputCard();
+                }
             }
-            
+
             player.GiveCard(card);
 
             return card;
+        }
+
+        private static Card ParseInputCard()
+        {
+            Console.WriteLine("Ender the choosen card in format <<<cardValue cardSuit>>>");
+            String input = Console.ReadLine();
+            var parts = input.Split(null);
+            var value = ParseInputToCardValue(parts[0]);
+            var suit = ParseInputToCardSuit(parts[1]);
+
+            return new Card() { Value = value, Suit = suit };
         }
 
         private static CardValue ParseInputToCardValue(string input)

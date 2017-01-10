@@ -108,6 +108,18 @@ namespace SixtySix
         {
             //give card
             var card = MovementUtil.MakeTurn(player1, player2, deck, null);
+
+            //Check for additional point -> (20 or 40)
+            //TODO Idea for modification: Player choose if he wants to call his announce. If has more than one announce can choose which one wants to play.
+            if (SixtySixUtil.HasForty(player1.Cards, card, deck))
+            {
+                SixtySixUtil.CallForty(player1);
+            }
+            else if (SixtySixUtil.HasTwenty(player1.Cards, card, deck))
+            {
+                SixtySixUtil.CallTwenty(player1);
+            }
+
             var otherCard = MovementUtil.MakeTurn(player2, player1, deck, card);
             var handScore = (int)card.Value + (int)otherCard.Value;
 

@@ -42,23 +42,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="enums\PlayStrategy.cs" />
-    <Compile Include="MCTSEngine\MCTSEngine.cs" />
-    <Compile Include="movementUtil\AIMovementUtil.cs" />
+    <Compile Include="AIGameEngines\MCTSEngine\MCTSEngine.cs" />
+    <Compile Include="game\movementUtil\AIMovementUtil.cs" />
     <Compile Include="game\Card.cs" />
     <Compile Include="enums\CardValue.cs" />
     <Compile Include="game\CardsDeckUtil.cs" />
     <Compile Include="constants\Constants.cs" />
     <Compile Include="game\Deck.cs" />
     <Compile Include="game\GameEngine.cs" />
-    <Compile Include="movementUtil\InputPlayerMovementUtil.cs" />
-    <Compile Include="movementUtil\MovementUtil.cs" />
-    <Compile Include="MCTSEngine\Node.cs" />
+    <Compile Include="game\movementUtil\InputPlayerMovementUtil.cs" />
+    <Compile Include="game\movementUtil\MovementUtil.cs" />
+    <Compile Include="AIGameEngines\MCTSEngine\Node.cs" />
     <Compile Include="player\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="enums\CardSuit.cs" />
     <Compile Include="game\SixtySixUtil.cs" />
-    <Compile Include="RuleBasedEngine\RuleBasedMovementUtil.cs" />
+    <Compile Include="AIGameEngines\RuleBasedEngine\RuleBasedMovementUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

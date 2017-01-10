@@ -255,9 +255,19 @@ namespace SixtySix
             }
         }
 
-        public static bool HasToAnswerWithMatching(Deck deck, bool isClosed)
+        public static bool HasToAnswerWithMatching(Deck deck)
         {
-            return deck.Cards.Count == 0 || isClosed;
+            return deck.Cards.Count == 0 || deck.IsClosed;
+        }
+
+        public static bool HasAnsweringCard(Player player, Card card)
+        {
+            return player.Cards.First(x => x.Suit == card.Suit) != null;
+        }
+
+        public static List<Card> GetHandAnsweringCards(Player player, Card card)
+        {
+            return player.Cards.Where(x => x.Suit == card.Suit).ToList<Card>();
         }
 
         public static bool IsSixtySixReached(Player player, Player other)
