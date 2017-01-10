@@ -64,9 +64,19 @@ namespace SixtySix
         private static Card GiveRandomBasedCard(Player player, Deck deck, Card playedFromOther = null)
         {
             var rand = new Random();
-            var card = player.Cards[rand.Next(0, player.Cards.Count)];
-
-            return card;
+            if(playedFromOther != null){
+                if ((deck.Cards.Count() == 0 || deck.IsClosed) && SixtySixUtil.HasAnsweringCard(player, playedFromOther))
+                {
+                    var answeringCards = SixtySixUtil.GetHandAnsweringCards(player, playedFromOther);
+                    return answeringCards[rand.Next(0, player.Cards.Count)];
+                }
+                else
+                {
+                    return player.Cards[rand.Next(0, player.Cards.Count)];
+                }
+            } else {
+                return player.Cards[rand.Next(0, player.Cards.Count)];
+            }
         }
 
         private static Card GiveMCTSBasedCard(Player player, Deck deck, Card playedFromOther = null)
