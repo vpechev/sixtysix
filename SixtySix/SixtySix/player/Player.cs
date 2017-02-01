@@ -9,7 +9,7 @@ namespace SixtySix
 {
     public class Player
     {
-        public Player(bool isAIPlayer)
+        public Player(bool isAIPlayer=false)
         {
             Cards = new List<Card>();
             ThrownCards = new List<Card>();
@@ -49,6 +49,13 @@ namespace SixtySix
             }
 
             return output;
+        }
+
+        public void ResetPlayerAfterDeal()
+        {
+            this.Score = 0;
+            this.Cards = new List<Card>();
+            this.ThrownCards = new List<Card>();
         }
 
         public override string ToString()

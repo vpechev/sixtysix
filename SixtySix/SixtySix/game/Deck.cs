@@ -16,7 +16,8 @@ namespace SixtySix
 
         public Deck()
         {
-            Cards = new List<Card>(Constants.DECK_COUNT);            
+            Cards = new List<Card>(Constants.DECK_COUNT);
+            ThrownCards = new List<Card>(Constants.DECK_COUNT);
         }
 
         public override string ToString()

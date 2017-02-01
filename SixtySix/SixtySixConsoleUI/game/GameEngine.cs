@@ -9,24 +9,19 @@ namespace SixtySix
 {
     public class GameEngine
     {
-        public static Player PlaySixtySix()
+        /*
+         * Itterative are deals been played until one of the players reach sixty six
+         */
+        public static Player PlaySixtySix(Player player1, Player player2)
         {
             var deck = CardsDeckUtil.InitializeDeck();
-            var player1 = new Player(true); //human player
-            var player2 = new Player(true, PlayStrategy.Random); //random AI player
-            //var player2 = new Player(true, PlayStrategy.RuleBased); //random AI player
-            //var player2 = new Player(true, PlayStrategy.MCTS); //random AI player
             player1.HasWonLastDeal = true;
 
             CardsDeckUtil.shuffleDeck(deck); //we first shuffle the deck
             do
             {
-                player1.Score = 0;
-                player2.Score = 0;
-                player1.Cards = new List<Card>();
-                player2.Cards = new List<Card>();
-                player1.ThrownCards = new List<Card>();
-                player2.ThrownCards = new List<Card>();
+                player1.ResetPlayerAfterDeal();
+                player2.ResetPlayerAfterDeal();
                 
                 if (player1.HasWonLastDeal)
                 {
@@ -46,6 +41,7 @@ namespace SixtySix
                 } 
                 else 
                 {
+                    //Should not enter here
                     PlayOneDeal(deck, player1, player2);
                 }
             }

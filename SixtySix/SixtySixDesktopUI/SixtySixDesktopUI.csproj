@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FD32FE5E-8764-432F-96F8-21DDD5360C3D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SixtySixDesktopUI</RootNamespace>
+    <AssemblyName>SixtySixDesktopUI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Data\DataPersister.cs" />
+    <Compile Include="ViewModels\CardsBoardViewModel.cs" />
+    <Compile Include="ViewModels\CardViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\CardsBoardView.xaml.cs">
+      <DependentUpon>CardsBoardView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\CardsBoardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="CardImageFiles\PNG-cards-1.3\10_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\10_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\10_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\10_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\2_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\2_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\2_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\2_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\3_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\3_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\3_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\3_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\4_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\4_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\4_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\4_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\5_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\5_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\5_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\5_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\6_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\6_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\6_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\6_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\7_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\7_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\7_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\7_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\8_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\8_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\8_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\8_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\9_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\9_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\9_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\9_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\ace_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\ace_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\ace_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\ace_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\ace_of_spades2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\black_joker.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_clubs2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_diamonds2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_hearts2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\jack_of_spades2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_clubs2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_diamonds2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_hearts2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\king_of_spades2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_clubs.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_clubs2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_diamonds.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_diamonds2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_hearts.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_hearts2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_spades.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\queen_of_spades2.png" />
+    <Resource Include="CardImageFiles\PNG-cards-1.3\red_joker.png" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\10_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\10_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\10_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\10_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\2_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\2_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\2_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\2_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\3_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\3_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\3_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\3_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\4_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\4_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\4_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\4_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\5_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\5_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\5_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\5_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\6_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\6_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\6_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\6_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\7_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\7_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\7_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\7_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\8_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\8_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\8_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\8_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\9_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\9_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\9_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\9_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\ace_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\ace_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\ace_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\ace_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\ace_of_spades2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\black_joker.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_clubs2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_diamonds2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_hearts2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\jack_of_spades2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_clubs2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_diamonds2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_hearts2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\king_of_spades2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_clubs.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_clubs2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_diamonds.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_diamonds2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_hearts.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_hearts2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_spades.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\queen_of_spades2.svg" />
+    <Content Include="CardImageFiles\SVG-cards-1.3\red_joker.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SixtySix\SixtySix.csproj">
+      <Project>{aa336b79-073c-4724-a45a-041b67e5d696}</Project>
+      <Name>SixtySix</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
