@@ -3,20 +3,82 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModels="clr-namespace:SixtySixDesktopUI.ViewModels"
         
-        Title="MainWindow" Height="350" Width="525">
+        Title="Сантасе" Height="724" Width="1024">
     <Window.DataContext>
         <viewModels:CardsBoardViewModel />
     </Window.DataContext>
-    <Grid>
-        <!--<Views:CardsBoardView />-->
-        <StackPanel DataContext="{Binding PlayerCards}">
-            <!--<ItemsControl ItemsSource="{Binding}">-->
-                <TextBlock Text="{Binding CardValue}" />
-                <TextBlock Text="{Binding CardSuit}" />
-                <Image Source="{Binding CardImageSrc}"
-                       Width="100"
-                       Height="200"  />
-            <!--</ItemsControl>-->
+    <Grid Background="Bisque">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <WrapPanel>
+                <StackPanel>
+                    <TextBlock>Player</TextBlock>
+                    <TextBlock Text="{Binding Path=Opponent.Score}">points</TextBlock>
+                    <TextBlock Text="{Binding Path=Opponent.WinsCount}"> of 11 wins</TextBlock>
+                </StackPanel>
+                <ItemsControl x:Name="opponentCardsList" ItemsSource="{Binding Path=Opponent.Cards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <HierarchicalDataTemplate>
+                            <Image Width="80" Height="200"
+                                   Margin="10"
+                                   Source="{Binding CardBackImageSrc}" />
+                        </HierarchicalDataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1">
+            <WrapPanel Orientation="Horizontal">
+                <Image Width="80" Height="200" 
+                       Source="{Binding Path=TrumpCard.CardBackImageSrc}" />
+                <Image Width="80" Height="200" 
+                       Margin="10"
+                       Source="{Binding Path=TrumpCard.CardImageSrc}" />
+            </WrapPanel>
         </StackPanel>
+
+        <ScrollViewer Grid.Row="2"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <WrapPanel>
+                <StackPanel>
+                    <TextBlock>Player</TextBlock>
+                    <TextBlock Text="{Binding Path=Player.Score}">points</TextBlock>
+                    <TextBlock Text="{Binding Path=Player.WinsCount}"> of 11 wins</TextBlock>
+                </StackPanel>
+                <ItemsControl x:Name="playerCardsList" ItemsSource="{Binding Path=Player.Cards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <HierarchicalDataTemplate>
+                            <!--<ListBox Name="mylistBox"
+                                 Width="150" Height="200"
+                                 Padding="0">-->
+                            <!--<TextBlock Text="{Binding CardValue.Value}" Visibility="Hidden"/>
+                                <TextBlock Text="{Binding CardSuit.Value}" Visibility="Hidden"/>-->
+                            <Image Width="80" Height="200"
+                                       Margin="10"
+                                       Source="{Binding CardImageSrc}" />
+                            <!--</ListBox>-->
+                        </HierarchicalDataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
+
     </Grid>
 </Window>

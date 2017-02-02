@@ -1,4 +1,5 @@
 ﻿using SixtySix;
+using SixtySix.enums;
 using SixtySixDesktopUI.Commands;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,19 @@ namespace SixtySixDesktopUI.ViewModels
 {
     public class CardsBoardViewModel : ViewModelBase
     {
-        public List<CardViewModel> PlayerCards { get; set; }
+        public CardsBoardViewModel()
+        {
+            this.Player = new Player(false);
+            this.Opponent = new Player(true, PlayStrategy.Random);
+            this.Deck = CardsDeckUtil.InitializeDeck();
+            CardsDeckUtil.ShuffleDeck(this.Deck);
+            SixtySixUtil.DealCards(Deck, Player, Opponent);
+        }
+
+        public Deck Deck { get; set; }
+        public Card TrumpCard { get { return Deck.Cards.Last();  } }
+        public Player Player { get; set; }
+        public Player Opponent { get; set; }
 
         public int CurrentDealPlayerScore { get; set; }
 
@@ -38,16 +51,6 @@ namespace SixtySixDesktopUI.ViewModels
                 this.message = value; 
                 this.OnPropertyChanges("TestMessage"); 
             } 
-        }
-
-        public CardsBoardViewModel()
-        {
-            PlayerCards = new List<CardViewModel>();
-            PlayerCards.Add(new CardViewModel()
-            {
-                CardValue = CardValue.TEN,
-                CardSuit = CardSuit.CLUB
-            });
         }
 
         private void HandleGiveCardCommand(object parameter)

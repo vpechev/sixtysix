@@ -7,12 +7,27 @@ using System.Threading.Tasks;
 namespace SixtySix
 {
     public class Card {
-    
+
+        public string CardImageSrc
+        {
+            get
+            {
+                return @"..\CardImageFiles\PNG-cards-1.3\" + this.ToString() + ".png".ToLower();
+            }
+        }
+        public string _cardBackImageSrc { get; set; }
         public CardSuit Suit { get; set; }
         public CardValue Value { get; set; }
 
+
+        public string CardBackImageSrc
+        {
+            get { return @"..\CardImageFiles\PNG-cards-1.3\red_joker.png"; }
+            set { _cardBackImageSrc = value; }
+        }
+
         public override string ToString(){            
-            return String.Format("{0} {1} ", Value.ToString(), Suit.ToString());
+            return String.Format("{0}_of_{1}s", Value.ToString(), Suit.ToString());
         }
 
         public Card()

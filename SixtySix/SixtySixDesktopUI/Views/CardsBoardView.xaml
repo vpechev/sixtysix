@@ -10,14 +10,16 @@
         <viewModels:CardsBoardViewModel />
     </UserControl.DataContext>
     <Grid>
-        <StackPanel DataContext="{Binding PlayerCards}">
-            <ItemsControl ItemsSource="{Binding}">
-                <TextBlock Text="{Binding CardValue}" />
-                <TextBlock Text="{Binding CardSuit}" />
-                <Image Source="{Binding CardImageSrc}" />
-            </ItemsControl>
-        </StackPanel>
+        <!--<StackPanel Name="asdas" DataContext="{Binding PlayerCards}">
+            <TextBlock Text="{Binding CardValue}" />
+            <TextBlock Text="{Binding CardSuit}" />
+            <Image Source="{Binding CardImageSrc}" />
         
-        
+        <ItemsControl ItemsSource="{Binding PlayerCards}">
+            <TextBlock Text="{Binding CardValue}" />
+            <TextBlock Text="{Binding CardSuit}" />
+            <Image Source="{Binding CardImageSrc}" />
+        </ItemsControl>
+        </StackPanel>-->
     </Grid>
 </UserControl>

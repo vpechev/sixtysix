@@ -25,7 +25,7 @@ namespace SixtySix
             return deck;
         }
 
-        public static void shuffleDeck(Deck deck)
+        public static void ShuffleDeck(Deck deck)
         {
             Random rand = new Random(System.DateTime.Now.Millisecond);
             for (int i = deck.Cards.Count - 1; i > 0; --i)

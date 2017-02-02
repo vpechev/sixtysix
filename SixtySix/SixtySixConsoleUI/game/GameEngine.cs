@@ -19,7 +19,7 @@ namespace SixtySixConsoleUI
             var deck = CardsDeckUtil.InitializeDeck();
             player1.HasWonLastDeal = true;
 
-            CardsDeckUtil.shuffleDeck(deck); //we first shuffle the deck
+            CardsDeckUtil.ShuffleDeck(deck); //we first shuffle the deck
             do
             {
                 player1.ResetPlayerAfterDeal();
