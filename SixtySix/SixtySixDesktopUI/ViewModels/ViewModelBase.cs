@@ -11,7 +11,7 @@ namespace SixtySixDesktopUI.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanges(string propertyName)
+        protected void OnPropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)
             {

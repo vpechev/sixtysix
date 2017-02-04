@@ -4,22 +4,122 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:SixtySixDesktopUI.ViewModels"
+             xmlns:appProps="clr-namespace:SixtySixDesktopUI.CustomProperties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>
         <viewModels:CardsBoardViewModel />
     </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
-        <!--<StackPanel Name="asdas" DataContext="{Binding PlayerCards}">
-            <TextBlock Text="{Binding CardValue}" />
-            <TextBlock Text="{Binding CardSuit}" />
-            <Image Source="{Binding CardImageSrc}" />
-        
-        <ItemsControl ItemsSource="{Binding PlayerCards}">
-            <TextBlock Text="{Binding CardValue}" />
-            <TextBlock Text="{Binding CardSuit}" />
-            <Image Source="{Binding CardImageSrc}" />
-        </ItemsControl>
-        </StackPanel>-->
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <WrapPanel>
+                <StackPanel>
+                    <TextBlock>Player</TextBlock>
+                    <TextBlock Text="{Binding Path=Opponent.Score}">points</TextBlock>
+                    <TextBlock Text="{Binding Path=Opponent.WinsCount}"> of 11 wins</TextBlock>
+                </StackPanel>
+                <ItemsControl x:Name="opponentCardsList" ItemsSource="{Binding Path=Opponent.Cards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <HierarchicalDataTemplate>
+                            <Image Width="80" Height="200"
+                                   Margin="10"
+                                   Source="{Binding CardBackImageSrc}" />
+                        </HierarchicalDataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1">
+            <WrapPanel Orientation="Horizontal">
+                <Image Width="80" Height="200" 
+                       Source="{Binding Path=TrumpCard.CardBackImageSrc}" />
+                <Image Width="80" Height="200" 
+                       Margin="10"
+                       Source="{Binding Path=TrumpCard.CardImageSrc}" />
+                
+                <Image Width="80" Height="200" 
+                       appProps:ApplicationProperties.MarginLeft="200"
+                       Source="{Binding Path=PlayerSelectedCard.CardImageSrc}" />
+                <Image Width="80" Height="200" 
+                       Margin="10"
+                       Source="{Binding Path=OpponentSelectedCard.CardImageSrc}" />
+                <TextBlock Text="{Binding TestMessage}" Background="Red" Width="300" Height="100" Foreground="Azure"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <WrapPanel>
+                <StackPanel>
+                    <TextBlock>Player</TextBlock>
+                    <TextBlock Text="{Binding Path=Player.Score}">points</TextBlock>
+                    <TextBlock Text="{Binding Path=Player.WinsCount}"> of 11 wins</TextBlock>
+                </StackPanel>
+                <ItemsControl x:Name="playerCardsList" ItemsSource="{Binding Path=Player.Cards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <HierarchicalDataTemplate>
+                            <Button Style="{DynamicResource NoChromeButton}"
+                                    Width="140" Height="200" 
+                                    Margin="10"
+                                    Padding="0"
+                                    Command="{Binding ElementName=playerCardsList,
+                                    Path=DataContext.GiveCard}"
+                                    CommandParameter="{Binding}" >
+
+                                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="139" Height="199" Margin="0"
+                                       
+                                       Source="{Binding CardImageSrc}" />
+
+                            </Button>
+                        </HierarchicalDataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

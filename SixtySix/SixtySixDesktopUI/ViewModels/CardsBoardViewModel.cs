@@ -21,17 +21,55 @@ namespace SixtySixDesktopUI.ViewModels
             SixtySixUtil.DealCards(Deck, Player, Opponent);
         }
 
+        #region Properties
         public Deck Deck { get; set; }
         public Card TrumpCard { get { return Deck.Cards.Last();  } }
         public Player Player { get; set; }
         public Player Opponent { get; set; }
-
-        public int CurrentDealPlayerScore { get; set; }
-
-        public ICommand giveCardCommand { get; set; }
-
+        //TODO Temp variable to be removed
         public Card CurrentCard { get; set; }
+        //TODO: to be removed;
+        private Card playerSelectedCard;
+        public Card PlayerSelectedCard
+        {
+            get
+            {
+                return playerSelectedCard;
+            }
+            set
+            {
+                this.playerSelectedCard = value;
+                this.OnPropertyChanged("PlayerSelectedCard");
+            }
+        }
+        private Card opponentSelectedCard;
+        public Card OpponentSelectedCard
+        {
+            get
+            {
+                return opponentSelectedCard;
+            }
+            set
+            {
+                this.opponentSelectedCard = value;
+                this.OnPropertyChanged("OpponentSelectedCard");
+            }
+        }
+        private string testMessage;
+        public string TestMessage
+        {
+            get { return this.testMessage; }
+            set
+            {
+                this.testMessage = value;
+                this.OnPropertyChanged("TestMessage");
+            }
+        }
+        #endregion
 
+        #region Commands
+        public ICommand giveCardCommand { get; set; }
+       
         public ICommand GiveCard {
             get
             {
@@ -42,21 +80,19 @@ namespace SixtySixDesktopUI.ViewModels
                 return this.giveCardCommand;
             }
         }
+        #endregion
 
-        //TODO: to be removed;
-        private string message;
-        public string TestMessage {
-            get { return this.message; }
-            set {
-                this.message = value; 
-                this.OnPropertyChanges("TestMessage"); 
-            } 
-        }
-
+        #region Event handlers
         private void HandleGiveCardCommand(object parameter)
         {
-            this.TestMessage = string.Format("Current card: {0}", CurrentCard);
+            this.PlayerSelectedCard = (Card)parameter;
+            //TODO should update the view and remove the card from the player hand
+            this.Player.Cards.Remove(this.PlayerSelectedCard);
+            //other player has to give a card;
+            //TODO Sleep current thread for a second 
+            //this.OpponentSelectedCard = AIMovementUtil.MakeTurn(this.Opponent, this.Deck, this.PlayerSelectedCard);
         }
+        #endregion
 
     }
 }
