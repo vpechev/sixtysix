@@ -68,7 +68,7 @@ namespace SixtySix
                 if ((deck.Cards.Count() == 0 || deck.IsClosed) && SixtySixUtil.HasAnsweringCard(player, playedFromOther))
                 {
                     var answeringCards = SixtySixUtil.GetHandAnsweringCards(player, playedFromOther);
-                    return answeringCards[rand.Next(0, player.Cards.Count)];
+                    return answeringCards[rand.Next(0, answeringCards.Count)];
                 }
                 else
                 {

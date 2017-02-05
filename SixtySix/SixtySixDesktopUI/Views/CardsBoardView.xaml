@@ -5,36 +5,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:SixtySixDesktopUI.ViewModels"
              xmlns:appProps="clr-namespace:SixtySixDesktopUI.CustomProperties"
+             xmlns:converters="clr-namespace:SixtySixDesktopUI.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             Padding="50">
     <UserControl.DataContext>
         <viewModels:CardsBoardViewModel />
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#ADADAD"/>
-                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/AppStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <converters:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter" />
+            
+        </ResourceDictionary>
     </UserControl.Resources>
     
     <Grid>
@@ -47,11 +35,23 @@
         <ScrollViewer Grid.Row="0"
                       ScrollViewer.VerticalScrollBarVisibility="Auto">
             <WrapPanel>
-                <StackPanel>
-                    <TextBlock>Player</TextBlock>
-                    <TextBlock Text="{Binding Path=Opponent.Score}">points</TextBlock>
-                    <TextBlock Text="{Binding Path=Opponent.WinsCount}"> of 11 wins</TextBlock>
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2">Оpponent</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Path=Opponent.Score}"></TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="/66 points"></TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Path=Opponent.WinsCount}"></TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="/11 wins"></TextBlock>
+                </Grid>
                 <ItemsControl x:Name="opponentCardsList" ItemsSource="{Binding Path=Opponent.Cards}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -72,29 +72,43 @@
         <StackPanel Grid.Row="1">
             <WrapPanel Orientation="Horizontal">
                 <Image Width="80" Height="200" 
-                       Source="{Binding Path=TrumpCard.CardBackImageSrc}" />
+                       Source="{Binding Path=TrumpCard.CardBackImageSrc}" 
+                       Visibility="{Binding Path=TrumpCard, Converter={StaticResource IsNullToVisibilityConverter}}"/>
                 <Image Width="80" Height="200" 
                        Margin="10"
-                       Source="{Binding Path=TrumpCard.CardImageSrc}" />
+                       Source="{Binding Path=TrumpCard.CardImageSrc}"
+                       Visibility="{Binding Path=TrumpCard, Converter={StaticResource IsNullToVisibilityConverter}}"/>
                 
                 <Image Width="80" Height="200" 
                        appProps:ApplicationProperties.MarginLeft="200"
-                       Source="{Binding Path=PlayerSelectedCard.CardImageSrc}" />
+                       Source="{Binding Path=Player.SelectedCard.CardImageSrc}" />
                 <Image Width="80" Height="200" 
                        Margin="10"
-                       Source="{Binding Path=OpponentSelectedCard.CardImageSrc}" />
-                <TextBlock Text="{Binding TestMessage}" Background="Red" Width="300" Height="100" Foreground="Azure"/>
+                       Source="{Binding Path=Opponent.SelectedCard.CardImageSrc}" />
+                <TextBlock Text="{Binding TestMessage}" Background="Ivory" Width="300" Height="100" Foreground="LightSeaGreen"/>
             </WrapPanel>
         </StackPanel>
 
         <ScrollViewer Grid.Row="2"
                       ScrollViewer.VerticalScrollBarVisibility="Auto">
             <WrapPanel>
-                <StackPanel>
-                    <TextBlock>Player</TextBlock>
-                    <TextBlock Text="{Binding Path=Player.Score}">points</TextBlock>
-                    <TextBlock Text="{Binding Path=Player.WinsCount}"> of 11 wins</TextBlock>
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2">Player</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Path=Player.Score}"></TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="/66 points"></TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Path=Player.WinsCount}"></TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="/11 wins"></TextBlock>
+                </Grid>
                 <ItemsControl x:Name="playerCardsList" ItemsSource="{Binding Path=Player.Cards}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -111,10 +125,11 @@
                                     Path=DataContext.GiveCard}"
                                     CommandParameter="{Binding}" >
 
-                                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="139" Height="199" Margin="0"
-                                       
+                                <Image HorizontalAlignment="Stretch" 
+                                       VerticalAlignment="Stretch" 
+                                       Width="139" Height="199" 
+                                       Margin="0"
                                        Source="{Binding CardImageSrc}" />
-
                             </Button>
                         </HierarchicalDataTemplate>
                     </ItemsControl.ItemTemplate>

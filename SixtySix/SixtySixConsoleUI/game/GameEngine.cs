@@ -28,7 +28,7 @@ namespace SixtySixConsoleUI
                 if (player1.HasWonLastDeal)
                 {
                     var splitIndex = MovementUtil.GetDeckSplittingIndex(player2);
-                    CardsDeckUtil.splitDeck(deck, splitIndex); //one of the players should split the deck
+                    CardsDeckUtil.SplitDeck(deck, splitIndex); //one of the players should split the deck
                     player1.HasWonLastHand = true;
                     player2.HasWonLastHand = false;
                     PlayOneDeal(deck, player1, player2);
@@ -36,7 +36,7 @@ namespace SixtySixConsoleUI
                 else if (player2.HasWonLastDeal)
                 {
                     var splitIndex = MovementUtil.GetDeckSplittingIndex(player1);
-                    CardsDeckUtil.splitDeck(deck, splitIndex); //one of the players should split the deck
+                    CardsDeckUtil.SplitDeck(deck, splitIndex); //one of the players should split the deck
                     player2.HasWonLastHand = true;
                     player1.HasWonLastHand = false;
                     PlayOneDeal(deck, player2, player1);

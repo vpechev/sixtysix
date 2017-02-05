@@ -211,13 +211,16 @@ namespace SixtySix
         }
 
         //COMMON UTILITY METHODS
-        public static void DrawCard(Player player, Deck deck)
+        public static Card DrawCard(Player player, Deck deck)
         {
             if (HasCardsInDeck(deck))
             {
+                var currentCard = deck.Cards.First();
                 player.Cards.Add(deck.Cards.First());
                 deck.Cards.Remove(deck.Cards.First());
+                return currentCard;
             }
+            return null;
         }
 
         /*
@@ -262,7 +265,7 @@ namespace SixtySix
 
         public static bool HasAnsweringCard(Player player, Card card)
         {
-            return player.Cards.First(x => x.Suit == card.Suit) != null;
+            return player.Cards.FirstOrDefault(x => x.Suit == card.Suit) != null;
         }
 
         public static List<Card> GetHandAnsweringCards(Player player, Card card)

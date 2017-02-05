@@ -37,7 +37,7 @@ namespace SixtySix
             }
         }
 
-        public static void splitDeck(Deck deck, int index)
+        public static void SplitDeck(Deck deck, int index)
         {
             int cardsListCount = deck.Cards.Count;
 
