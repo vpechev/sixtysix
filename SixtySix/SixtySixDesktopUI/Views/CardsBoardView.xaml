@@ -66,6 +66,8 @@
                         </HierarchicalDataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <Label>Opponent Messages</Label>
+                <TextBlock Text="{Binding Opponent.Messages}" Background="DarkCyan" Width="300" Height="100" Foreground="Tomato"/>
             </WrapPanel>
         </ScrollViewer>
 
@@ -74,11 +76,18 @@
                 <Image Width="80" Height="200" 
                        Source="{Binding Path=TrumpCard.CardBackImageSrc}" 
                        Visibility="{Binding Path=TrumpCard, Converter={StaticResource IsNullToVisibilityConverter}}"/>
-                <Image Width="80" Height="200" 
-                       Margin="10"
-                       Source="{Binding Path=TrumpCard.CardImageSrc}"
-                       Visibility="{Binding Path=TrumpCard, Converter={StaticResource IsNullToVisibilityConverter}}"/>
                 
+                <Button Style="{DynamicResource NoChromeButton}"
+                                    Width="140" Height="200" 
+                                    Margin="10"
+                                    Padding="0"
+                                    Command="{Binding ChangeTrumpCard}"
+                                    Visibility="{Binding Path=TrumpCard, Converter={StaticResource IsNullToVisibilityConverter}}">
+
+                    <Image Width="80" Height="200" 
+                       Source="{Binding Path=TrumpCard.CardImageSrc}"/>
+                </Button>
+
                 <Image Width="80" Height="200" 
                        appProps:ApplicationProperties.MarginLeft="200"
                        Source="{Binding Path=Player.SelectedCard.CardImageSrc}" />
@@ -134,6 +143,8 @@
                         </HierarchicalDataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <Label>Player Messages</Label>
+                <TextBlock Text="{Binding Player.Messages}" Background="DarkCyan" Width="300" Height="100" Foreground="White"/>
             </WrapPanel>
         </ScrollViewer>
     </Grid>

@@ -252,6 +252,10 @@ namespace SixtySix
             {
                 return false;
             }
+            else if (first.Suit != second.Suit)
+            {
+                return true;
+            }
             else
             {
                 return first.Value >= second.Value;

@@ -62,7 +62,6 @@ namespace SixtySix
             //{
             //    deck.Cards.AddRange(deck.ThrownCards);
             //}
-
             if (player1.ThrownCards != null)
             {
                 deck.Cards.AddRange(player1.ThrownCards);

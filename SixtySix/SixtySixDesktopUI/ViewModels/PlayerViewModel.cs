@@ -50,6 +50,17 @@ namespace SixtySixDesktopUI.ViewModels
             }
         }
 
+        private string messages;
+        public string Messages
+        {
+            get { return this.messages; }
+            set
+            {
+                this.messages = value;
+                this.OnPropertyChanged("Messages");
+            }
+        }
+
         public PlayerViewModel(bool isAIPlayer=false)
         {
             Cards = new ObservableCollection<CardViewModel>();
