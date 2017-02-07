@@ -171,7 +171,8 @@ namespace SixtySix
         public static bool CanSwap(List<Card> handCards, Deck deck)
         {
             // last card is always deck.Cards[deck.Cards.Count() - 1]
-            if (deck.Cards.Count() < 2)
+            // if it is first hand we have 12 cards in the deck
+            if (deck.Cards.Count() < 2 || deck.Cards.Count() == 12)
             {
                 return false;
             }
@@ -262,9 +263,11 @@ namespace SixtySix
             }
         }
 
-        public static bool HasToAnswerWithMatching(Deck deck)
+        public static bool HasToAnswerWithMatching(Deck deck, Card card = null)
         {
-            return deck.Cards.Count == 0 || deck.IsClosed;
+            if (card == null)
+                return false;
+            return (deck.Cards.Count == 0 || deck.IsClosed);
         }
 
         public static bool HasAnsweringCard(Player player, Card card)

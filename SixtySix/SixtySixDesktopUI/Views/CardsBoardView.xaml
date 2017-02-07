@@ -94,7 +94,7 @@
                 <Image Width="80" Height="200" 
                        Margin="10"
                        Source="{Binding Path=Opponent.SelectedCard.CardImageSrc}" />
-                <TextBlock Text="{Binding TestMessage}" Background="Ivory" Width="300" Height="100" Foreground="LightSeaGreen"/>
+                <TextBlock Text="{Binding BoardMessage}" Background="Ivory" Width="300" Height="100" Foreground="LightSeaGreen"/>
             </WrapPanel>
         </StackPanel>
 

@@ -39,7 +39,10 @@ namespace SixtySixDesktopUI.ViewModels
             } 
             set
             {
-                Deck.Cards.Add(((CardViewModel)value).ToCard());
+                if (value != null)
+                {
+                    Deck.Cards.Add(((CardViewModel)value).ToCard());
+                }
                 this.OnPropertyChanged("TrumpCard");
             }
         }
@@ -48,14 +51,14 @@ namespace SixtySixDesktopUI.ViewModels
         //TODO Temp variable to be removed
         public Card CurrentCard { get; set; }
         //TODO: to be removed;
-        private string testMessage;
-        public string TestMessage
+        private string boardMessage;
+        public string BoardMessage
         {
-            get { return this.testMessage; }
+            get { return this.boardMessage; }
             set
             {
-                this.testMessage = value;
-                this.OnPropertyChanged("TestMessage");
+                this.boardMessage = value;
+                this.OnPropertyChanged("BoardMessage");
             }
         }
         #endregion
@@ -105,12 +108,11 @@ namespace SixtySixDesktopUI.ViewModels
         #region Event handlers
         /*
          * TODO 
-         *      HasToAnswerWithMatching - input player
-         *      Handle reaching 66
-         *      the opponent to change the trump card
+         *      Handle reaching 66 (Note: handle end of game by cannling) 
          */
         private void HandleGiveCardCommand(object parameter)
         {
+            //This check handle the case in which input player gives card before the AI player, when the AI player is on turn
             if (this.Opponent.HasWonLastHand && this.Opponent.SelectedCard == null)
             {
                 return;
@@ -127,15 +129,31 @@ namespace SixtySixDesktopUI.ViewModels
 
             if (parameter != null)
             {
-                //TODO here we should place the check for required answering 
+                var playerCard = (CardViewModel)parameter;
+                
+                if (this.Opponent.SelectedCard != null 
+                    && SixtySixUtil.HasToAnswerWithMatching(this.Deck, this.Opponent.SelectedCard.ToCard())
+                    && SixtySixUtil.HasAnsweringCard(this.Player.ToPlayer(), this.Opponent.SelectedCard.ToCard()))
+                {
+                    var playedFromOther = this.Opponent.SelectedCard.ToCard();
+                    var answeringCards = SixtySixUtil.GetHandAnsweringCards(this.Player.ToPlayer(), playedFromOther);
+                    if (!answeringCards.Contains(playerCard.ToCard()))
+                    {
+                        this.BoardMessage = "Player, you have to answer with matching card!!!";
+                        return;
+                    }                    
+                }
+                
                 this.Player.SelectedCard = (CardViewModel)parameter;
+                if (this.Opponent.SelectedCard == null)
+                {
+                    HandleCallingAnnounce(this.Player, this.Deck);
+                }
                 this.Player.Cards.Remove(this.Player.SelectedCard);
                 this.Player.ThrownCards.Add(this.Player.SelectedCard);
             }
 
-            if (this.Opponent.SelectedCard == null)
-            {
-                HandleCallingAnnounce(this.Player, this.Deck);
+            if (this.Opponent.SelectedCard == null) {
                 var opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Deck, this.Player.SelectedCard.ToCard()));
                 this.Opponent.SelectedCard = opponentCard;
                 this.Opponent.Cards.Remove(this.Opponent.SelectedCard);
@@ -150,7 +168,7 @@ namespace SixtySixDesktopUI.ViewModels
                 this.Opponent.HasWonLastHand = false;
 
 
-                this.TestMessage = "Player wins";
+                this.BoardMessage = "Player wins";
                 //the player holds the hand
                 this.Player.Score = this.Player.Score + handScore;
 
@@ -176,7 +194,7 @@ namespace SixtySixDesktopUI.ViewModels
                 this.Opponent.HasWonLastHand = true;
                 this.Player.HasWonLastHand = false;
 
-                this.TestMessage = "Opponent wins";
+                this.BoardMessage = "Opponent wins";
                 this.Opponent.Score = this.Opponent.Score + handScore;
                 
                 var newOpponentCard = SixtySixUtil.DrawCard(this.Opponent.ToPlayer(), this.Deck);
@@ -199,12 +217,21 @@ namespace SixtySixDesktopUI.ViewModels
                     HandleEndOfDeal(this.Opponent, this.Player, this.Deck);
                 });
 
+                if (this.Player.SelectedCard == null)
+                {
+                    ChangeTrumpCardLogic(this.Opponent);
+                }
                 opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Deck));
                 this.Opponent.Cards.Remove(opponentCard);
+
+                
                 Task.Delay(1500).ContinueWith(_ =>
                 {
                     this.Opponent.SelectedCard = opponentCard;
-                    HandleCallingAnnounce(this.Opponent, this.Deck);
+                    if (this.Player.SelectedCard == null)
+                    {
+                        HandleCallingAnnounce(this.Opponent, this.Deck);
+                    }
                     this.Opponent.ThrownCards.Add(this.Opponent.SelectedCard);
                 });
             }
@@ -212,14 +239,26 @@ namespace SixtySixDesktopUI.ViewModels
 
         private void HandleChangeTrumpCardCommand(object parameter)
         {
-            var card = this.Player.Cards.FirstOrDefault(x => { return x.Suit == this.TrumpCard.Suit && x.Value == CardValue.NINE; });
-            if (card != null && this.Player.Cards.Contains(card))
+            ChangeTrumpCardLogic(this.Player);
+        }
+
+        private void ChangeTrumpCardLogic(PlayerViewModel player)
+        {
+            if (SixtySixUtil.CanSwap(CardViewModel.ConvertListOfCardViewModelsToListOFCard(player.Cards), this.Deck))
             {
-                this.Player.Cards.Add(this.TrumpCard);
-                this.Deck.Cards.Remove(this.TrumpCard.ToCard());
-                this.TrumpCard = card;
-                this.Player.Cards.Remove(card);
-                this.Player.Messages = "Change Trump card!!!";
+                var card = player.Cards.FirstOrDefault(x => { return x.Suit == this.Deck.TrumpSuit && x.Value == CardValue.NINE; });
+                if (card != null && player.Cards.Contains(card))
+                {
+                    player.Cards.Add(this.TrumpCard);
+                    this.Deck.Cards.Remove(this.TrumpCard.ToCard());
+                    this.TrumpCard = card;
+                    player.Cards.Remove(card);
+                    player.Messages = "Change Trump card!!!";
+                }
+            }
+            else
+            {
+                this.BoardMessage = "Cannot Change The Trump card!!!";
             }
         }
 
