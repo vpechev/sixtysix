@@ -30,6 +30,8 @@ namespace SixtySix
         public PlayStrategy PlayStrategy { get; set; }
         public List<Card> ThrownCards { get; set; }
 
+        public Card SelectedCard { get; set; }
+
         public Card GiveCard(Card card)
         {
             this.Cards.Remove(card);

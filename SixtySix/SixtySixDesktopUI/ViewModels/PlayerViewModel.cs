@@ -14,6 +14,7 @@ namespace SixtySixDesktopUI.ViewModels
         private CardViewModel selectedCard;
         private ObservableCollection<CardViewModel> cards;
         private int score;
+        private int winsCount;
 
         public ObservableCollection<CardViewModel> Cards
         {
@@ -31,7 +32,13 @@ namespace SixtySixDesktopUI.ViewModels
                 this.OnPropertyChanged("score");
             } 
         }
-        public int WinsCount { get; set; }
+        public int WinsCount {
+            get { return winsCount; } 
+            set {
+                this.winsCount = value;
+                this.OnPropertyChanged("winsCount");
+            }
+        }
         public bool HasWonLastDeal { get; set; }
         public bool HasWonLastHand { get; set; }
         public bool IsAIPlayer { get; set; }
@@ -45,6 +52,11 @@ namespace SixtySixDesktopUI.ViewModels
             }
             set
             {
+                if (value != null)
+                {
+                    this.Cards.Remove(value);
+                this.ThrownCards.Add(value);
+                }
                 this.selectedCard = value;
                 this.OnPropertyChanged("SelectedCard");
             }

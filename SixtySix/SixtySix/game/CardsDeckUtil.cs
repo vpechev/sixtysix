@@ -28,6 +28,8 @@ namespace SixtySix
         public static void ShuffleDeck(Deck deck)
         {
             Random rand = new Random(System.DateTime.Now.Millisecond);
+
+            deck.IsEndOfGame = false;
             for (int i = deck.Cards.Count - 1; i > 0; --i)
             {
                 int k = rand.Next(i + 1);
@@ -40,6 +42,8 @@ namespace SixtySix
         public static void SplitDeck(Deck deck, int index)
         {
             int cardsListCount = deck.Cards.Count;
+
+            deck.IsEndOfGame = false;
 
             for (int i = 0; i < index; i++)
             {

@@ -12,7 +12,7 @@ namespace SixtySix
     {
         public static Card MakeTurn(Player player, Deck deck, Card playedFromOther=null)
         {
-            if (playedFromOther != null && player.HasWonLastHand)
+            if (playedFromOther == null && player.HasWonLastHand)
             {
                 //check for swapping opened card and swap if is allowed
                 if (SixtySixUtil.CanSwap(player.Cards, deck))

@@ -131,6 +131,11 @@ namespace SixtySix
 
         public static void DealCards(Deck deck, Player player1, Player player2)
         {
+            player1.Cards = new List<Card>();
+            player2.Cards = new List<Card>();
+            player1.ThrownCards = new List<Card>();
+            player2.ThrownCards = new List<Card>();
+
             GiveAThree(deck, player1);
             GiveAThree(deck, player2);
 
@@ -284,7 +289,7 @@ namespace SixtySix
         {
             if (player.HasWonLastHand && player.Score >= Constants.TOTAL_SCORE)
             {
-                player.WinsCount++;
+                player.WinsCount += SixtySixUtil.GetNumberOfWins(other);
                 player.HasWonLastDeal = true;
                 other.HasWonLastDeal = false;
                 Console.WriteLine(player.ToString() + " has won!!");

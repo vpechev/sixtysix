@@ -17,7 +17,7 @@ namespace SixtySix.RuleBasedEngine
             else
             {
                //other has played some card
-                if (deck.Cards.Count > 0 && !deck.IsClosed)
+                if (deck.Cards.Count() > 0 && !deck.IsClosed)
                 {
                     return GiveCardIfOtherHasPlayedPhase1(player, deck, playedFromOther);
                 }
@@ -42,12 +42,12 @@ namespace SixtySix.RuleBasedEngine
                 return player.Cards.First(x => x.Suit != deck.TrumpSuit && (x.Value == CardValue.KING || x.Value == CardValue.QUEEN));
             }
             //if player has Ace trump and will reach 66
-            else if (playerCards.First(x => x.Suit == deck.TrumpSuit && x.Value == CardValue.ACE) != null && player.Score + (int)CardValue.ACE >= Constants.TOTAL_SCORE)
+            else if (playerCards.FirstOrDefault(x => x.Suit == deck.TrumpSuit && x.Value == CardValue.ACE) != null && player.Score + (int)CardValue.ACE >= Constants.TOTAL_SCORE)
             {
                 return playerCards.First(x => x.Suit == deck.TrumpSuit && x.Value == CardValue.ACE);
             }
             //if Ace trump is thrown and player has 10 trump and will reach 66
-            else if (playerCards.First(x => x.Suit == deck.TrumpSuit && x.Value == CardValue.TEN) != null && deck.ThrownCards.Contains(new Card(CardValue.ACE, deck.TrumpSuit)) && player.Score + (int)CardValue.TEN >= Constants.TOTAL_SCORE)
+            else if (playerCards.FirstOrDefault(x => x.Suit == deck.TrumpSuit && x.Value == CardValue.TEN) != null && deck.ThrownCards.Contains(new Card(CardValue.ACE, deck.TrumpSuit)) && player.Score + (int)CardValue.TEN >= Constants.TOTAL_SCORE)
             {
                 return playerCards.First(x => x.Suit == deck.TrumpSuit && x.Value == CardValue.TEN);
             }
@@ -55,22 +55,22 @@ namespace SixtySix.RuleBasedEngine
                 // give the lowest card
                 if(deck.Cards.Count > 0 && !deck.IsClosed){
                     // 9 not trump
-                    if (playerCards.First(x => x.Value == CardValue.NINE && x.Suit != deck.TrumpSuit) != null)
+                    if (playerCards.FirstOrDefault(x => x.Value == CardValue.NINE && x.Suit != deck.TrumpSuit) != null)
                     {
                         return playerCards.First(x => x.Value == CardValue.NINE && x.Suit != deck.TrumpSuit);
                     }
                     // Jack not trump
-                    else if (playerCards.First(x => x.Value == CardValue.JACK && x.Suit != deck.TrumpSuit) != null)
+                    else if (playerCards.FirstOrDefault(x => x.Value == CardValue.JACK && x.Suit != deck.TrumpSuit) != null)
                     {
                         return playerCards.First(x => x.Value == CardValue.JACK && x.Suit != deck.TrumpSuit);
                     }
                     // Queen not trump
-                    else if (playerCards.First(x => x.Value == CardValue.QUEEN && x.Suit != deck.TrumpSuit) != null)
+                    else if (playerCards.FirstOrDefault(x => x.Value == CardValue.QUEEN && x.Suit != deck.TrumpSuit) != null)
                     {
                         return playerCards.First(x => x.Value == CardValue.QUEEN && x.Suit != deck.TrumpSuit);
                     }
                     // KING not trump
-                    else if (playerCards.First(x => x.Value == CardValue.KING && x.Suit != deck.TrumpSuit) != null)
+                    else if (playerCards.FirstOrDefault(x => x.Value == CardValue.KING && x.Suit != deck.TrumpSuit) != null)
                     {
                         return playerCards.First(x => x.Value == CardValue.KING && x.Suit != deck.TrumpSuit);
                     }
@@ -83,10 +83,11 @@ namespace SixtySix.RuleBasedEngine
                     // the cards in deck are left OR the game is closed
                     var aces = playerCards.Where(x=>x.Value == CardValue.ACE);
                     var tenthsWhichAcesAreThrown = playerCards.Where(x=>x.Value == CardValue.TEN && deck.ThrownCards.Contains(new Card(CardValue.ACE, x.Suit)));
-                    if(aces.First(x=>x.Suit == deck.TrumpSuit) != null){
+                    if (aces.FirstOrDefault(x => x.Suit == deck.TrumpSuit) != null)
+                    {
                         return aces.First(x => x.Suit == deck.TrumpSuit);
                     }
-                    else if (tenthsWhichAcesAreThrown.First(x => x.Suit == deck.TrumpSuit) != null && deck.ThrownCards.Contains(new Card(CardValue.ACE, deck.TrumpSuit)))
+                    else if (tenthsWhichAcesAreThrown.FirstOrDefault(x => x.Suit == deck.TrumpSuit) != null && deck.ThrownCards.Contains(new Card(CardValue.ACE, deck.TrumpSuit)))
                     {
                         return tenthsWhichAcesAreThrown.First(x => x.Suit == deck.TrumpSuit);
                     }
@@ -113,7 +114,7 @@ namespace SixtySix.RuleBasedEngine
             // if other player has played trump
             if (playedFromOther.Suit == deck.TrumpSuit)
             {
-                if (playedFromOther.Value == CardValue.TEN && playerCards.First(x => x.Value == CardValue.ACE && x.Suit == playedFromOther.Suit) != null)
+                if (playedFromOther.Value == CardValue.TEN && playerCards.FirstOrDefault(x => x.Value == CardValue.ACE && x.Suit == playedFromOther.Suit) != null)
                 {
                     return playerCards.First(x => x.Value == CardValue.ACE && x.Suit == playedFromOther.Suit);
                 }
@@ -124,7 +125,7 @@ namespace SixtySix.RuleBasedEngine
                 //if other player has not played trump
                 if (playedFromOther.Value == CardValue.ACE) // high card not trump
                 {
-                    if (playerCards.First(x => x.Suit == deck.TrumpSuit) != null)
+                    if (playerCards.FirstOrDefault(x => x.Suit == deck.TrumpSuit) != null)
                     {
                         var trumpCards = playerCards.Where(x => x.Suit == deck.TrumpSuit);
                         if ((int)trumpCards.Max().Value + (int)CardValue.ACE + player.Score >= Constants.TOTAL_SCORE)
@@ -140,7 +141,7 @@ namespace SixtySix.RuleBasedEngine
                     
                 if (playedFromOther.Value == CardValue.TEN)
                 {
-                    if (playerCards.First(x => x.Value == CardValue.ACE && x.Suit == playedFromOther.Suit) != null)
+                    if (playerCards.FirstOrDefault(x => x.Value == CardValue.ACE && x.Suit == playedFromOther.Suit) != null)
                     {
                         return playerCards.First(x => x.Value == CardValue.ACE && x.Suit == playedFromOther.Suit);
                     }

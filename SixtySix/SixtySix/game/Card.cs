@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SixtySix
 {
-    public class Card {
+    public class Card : IComparable{
 
         public CardSuit Suit { get; set; }
         public CardValue Value { get; set; }
@@ -55,6 +55,11 @@ namespace SixtySix
         public override string ToString()
         {
             return String.Format("{0}_of_{1}s", Value.ToString(), Suit.ToString());
+        }
+
+        public int CompareTo(object obj)
+        {
+            return this.Value.CompareTo(((Card)obj).Value);
         }
     }
 }

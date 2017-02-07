@@ -3,6 +3,7 @@ using SixtySix.enums;
 using SixtySixDesktopUI.Commands;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace SixtySixDesktopUI.ViewModels
         public CardsBoardViewModel()
         {
             this.Player = new PlayerViewModel(false);
-            this.Opponent = new PlayerViewModel(true, PlayStrategy.Random);
+            this.Opponent = new PlayerViewModel(true, PlayStrategy.RuleBased);
             this.Deck = CardsDeckUtil.InitializeDeck();
             CardsDeckUtil.ShuffleDeck(this.Deck);
             var player = this.Player.ToPlayer();
@@ -30,13 +31,15 @@ namespace SixtySixDesktopUI.ViewModels
         #region Properties
         public Deck Deck { get; set; }
 
-        private CardViewModel trumpCard;
-        public CardViewModel TrumpCard { 
-            get {
-                if (Deck.Cards.Count == 0)
+        //private CardViewModel trumpCard;
+        public CardViewModel TrumpCard
+        {
+            get
+            {
+                if (Deck.Cards == null || Deck.Cards.Count == 0 || Deck.IsEndOfGame)
                     return null;
                 return CardViewModel.ConvertToCardViewModel(Deck.Cards.Last());
-            } 
+            }
             set
             {
                 if (value != null)
@@ -122,7 +125,7 @@ namespace SixtySixDesktopUI.ViewModels
             {
                 this.TrumpCard = null;
             }
-            
+
             this.Player.Messages = null;
             this.Opponent.Messages = null;
 
@@ -130,8 +133,8 @@ namespace SixtySixDesktopUI.ViewModels
             if (parameter != null)
             {
                 var playerCard = (CardViewModel)parameter;
-                
-                if (this.Opponent.SelectedCard != null 
+
+                if (this.Opponent.SelectedCard != null
                     && SixtySixUtil.HasToAnswerWithMatching(this.Deck, this.Opponent.SelectedCard.ToCard())
                     && SixtySixUtil.HasAnsweringCard(this.Player.ToPlayer(), this.Opponent.SelectedCard.ToCard()))
                 {
@@ -141,28 +144,29 @@ namespace SixtySixDesktopUI.ViewModels
                     {
                         this.BoardMessage = "Player, you have to answer with matching card!!!";
                         return;
-                    }                    
+                    }
                 }
-                
+
                 this.Player.SelectedCard = (CardViewModel)parameter;
                 if (this.Opponent.SelectedCard == null)
                 {
                     HandleCallingAnnounce(this.Player, this.Deck);
+                    if (HandleEndOfDeal(this.Player, this.Opponent, this.Deck))
+                    {
+                        return;
+                    }
                 }
-                this.Player.Cards.Remove(this.Player.SelectedCard);
-                this.Player.ThrownCards.Add(this.Player.SelectedCard);
             }
 
-            if (this.Opponent.SelectedCard == null) {
+            if (this.Opponent.SelectedCard == null)
+            {
                 var opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Deck, this.Player.SelectedCard.ToCard()));
                 this.Opponent.SelectedCard = opponentCard;
-                this.Opponent.Cards.Remove(this.Opponent.SelectedCard);
-                this.Opponent.ThrownCards.Add(this.Opponent.SelectedCard);
             }
-            
+
             var handScore = (int)this.Player.SelectedCard.Value + (int)this.Opponent.SelectedCard.Value;
 
-            if (SixtySixUtil.WinsFirstCard(this.Player.SelectedCard.ToCard(), this.Opponent.SelectedCard.ToCard(), this.Deck.TrumpSuit))
+            if (!this.Opponent.HasWonLastHand && SixtySixUtil.WinsFirstCard(this.Player.SelectedCard.ToCard(), this.Opponent.SelectedCard.ToCard(), this.Deck.TrumpSuit))
             {
                 this.Player.HasWonLastHand = true;
                 this.Opponent.HasWonLastHand = false;
@@ -173,7 +177,8 @@ namespace SixtySixDesktopUI.ViewModels
                 this.Player.Score = this.Player.Score + handScore;
 
                 var newPlayerCard = SixtySixUtil.DrawCard(this.Player.ToPlayer(), this.Deck);
-                if(newPlayerCard != null){
+                if (newPlayerCard != null)
+                {
                     this.Player.Cards.Add(CardViewModel.ConvertToCardViewModel(newPlayerCard));
                     var newOpponentCard = SixtySixUtil.DrawCard(this.Opponent.ToPlayer(), this.Deck);
                     if (newOpponentCard != null)
@@ -184,19 +189,26 @@ namespace SixtySixDesktopUI.ViewModels
 
                 Task.Delay(1000).ContinueWith(_ =>
                 {
+                    if (HandleEndOfDeal(this.Player, this.Opponent, this.Deck))
+                    {
+                        this.Player.SelectedCard = null;
+                        this.Opponent.SelectedCard = null;
+                        return;
+                    }
                     this.Player.SelectedCard = null;
                     this.Opponent.SelectedCard = null;
-                    HandleEndOfDeal(this.Player, this.Opponent, this.Deck);
-                } );
-                
-            } else {
+                });
+
+            }
+            else
+            {
                 //the opponent hold the hand
                 this.Opponent.HasWonLastHand = true;
                 this.Player.HasWonLastHand = false;
 
                 this.BoardMessage = "Opponent wins";
                 this.Opponent.Score = this.Opponent.Score + handScore;
-                
+
                 var newOpponentCard = SixtySixUtil.DrawCard(this.Opponent.ToPlayer(), this.Deck);
                 if (newOpponentCard != null)
                 {
@@ -210,29 +222,39 @@ namespace SixtySixDesktopUI.ViewModels
 
                 CardViewModel opponentCard = null;
 
+                if (HandleEndOfDeal(this.Opponent, this.Player, this.Deck))
+                {
+                    return;
+                }
+
                 Task.Delay(1000).ContinueWith(_ =>
                 {
                     this.Player.SelectedCard = null;
                     this.Opponent.SelectedCard = null;
-                    HandleEndOfDeal(this.Opponent, this.Player, this.Deck);
                 });
 
                 if (this.Player.SelectedCard == null)
                 {
                     ChangeTrumpCardLogic(this.Opponent);
                 }
+
                 opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Deck));
                 this.Opponent.Cards.Remove(opponentCard);
 
-                
+
                 Task.Delay(1500).ContinueWith(_ =>
                 {
+                    if (Deck.Cards.Count == 0)
+                    {
+                        this.TrumpCard = null;
+                    }
+
                     this.Opponent.SelectedCard = opponentCard;
                     if (this.Player.SelectedCard == null)
                     {
                         HandleCallingAnnounce(this.Opponent, this.Deck);
+                        HandleEndOfDeal(this.Opponent, this.Player, this.Deck);
                     }
-                    this.Opponent.ThrownCards.Add(this.Opponent.SelectedCard);
                 });
             }
         }
@@ -289,42 +311,48 @@ namespace SixtySixDesktopUI.ViewModels
             }
         }
 
-        private static bool HandleEndOfDeal(PlayerViewModel player, PlayerViewModel opponent, Deck deck)
+        private bool HandleEndOfDeal(PlayerViewModel player, PlayerViewModel opponent, Deck deck)
         {
-            if (player.HasWonLastHand && player.Score >= Constants.TOTAL_SCORE)
-            {
-                player.WinsCount++;
+            if (player.HasWonLastHand && player.Score >= Constants.TOTAL_SCORE) {
+                deck.IsEndOfGame = true;
+                
+                var enginePlayer = player.ToPlayer();
+                var engineOpponent = opponent.ToPlayer();
+                CardsDeckUtil.CollectCardsInDeck(deck, enginePlayer, engineOpponent);
+
+                player.Cards = new ObservableCollection<CardViewModel>();
+
+                player.Score = 0;
+                opponent.Score = 0;
+                this.TrumpCard = null;
+                player.SelectedCard = null;
+                opponent.SelectedCard = null;
+                
+                player.WinsCount += SixtySixUtil.GetNumberOfWins(opponent.ToPlayer());
                 player.HasWonLastDeal = true;
                 opponent.HasWonLastDeal = false;
+                player.ThrownCards = new ObservableCollection<CardViewModel>();
+                opponent.Cards = new ObservableCollection<CardViewModel>();
+                opponent.ThrownCards = new ObservableCollection<CardViewModel>();
 
-                var enginePlayer = player.ToPlayer();
-                var engineOpпonent = opponent.ToPlayer();
-
-                CardsDeckUtil.CollectCardsInDeck(deck, enginePlayer, engineOpпonent);
-
-                enginePlayer.ResetPlayerAfterDeal();
-                engineOpпonent.ResetPlayerAfterDeal();
 
                 if (enginePlayer.HasWonLastDeal)
                 {
                     var splitIndex = AIMovementUtil.GetDeckSplittingIndex();
                     CardsDeckUtil.SplitDeck(deck, splitIndex); //one of the players should split the deck
-                    engineOpпonent.HasWonLastDeal = true;
-                    enginePlayer.HasWonLastDeal = false;
-                    SixtySixUtil.DealCards(deck, engineOpпonent, enginePlayer);
+                    SixtySixUtil.DealCards(deck, engineOpponent, enginePlayer);
                 }
-                else if (engineOpпonent.HasWonLastDeal)
+                else if (engineOpponent.HasWonLastDeal)
                 {
                     //TODO Get User Input
                     var splitIndex = 10; //MovementUtil.GetDeckSplittingIndex(engineOpпonent);
                     CardsDeckUtil.SplitDeck(deck, splitIndex); //one of the players should split the deck
-                    enginePlayer.HasWonLastDeal = true;
-                    engineOpпonent.HasWonLastDeal = false;
-                    SixtySixUtil.DealCards(deck, enginePlayer, engineOpпonent);
-                } 
+                    SixtySixUtil.DealCards(deck, enginePlayer, engineOpponent);
+                }
 
                 player = PlayerViewModel.ConvertToPlayerViewModel(enginePlayer);
-                opponent = PlayerViewModel.ConvertToPlayerViewModel(engineOpпonent);
+                opponent = PlayerViewModel.ConvertToPlayerViewModel(engineOpponent);
+
                 player.Messages = "WIN";
                 opponent.Messages = "LOSE";
 
