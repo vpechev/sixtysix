@@ -9,14 +9,20 @@ namespace SixtySix
 {
     public class Player
     {
-        public Player(bool isAIPlayer=false)
+		public Player(bool isAIPlayer=false, bool isSilent = true)
         {
             Cards = new List<Card>();
             ThrownCards = new List<Card>();
             IsAIPlayer = isAIPlayer;
+			IsSilent = isSilent;
+			if (!IsAIPlayer && IsSilent)
+			{
+				Console.WriteLine ("[Warning] Human Player can not be silent. Your choice will  be ignored.");
+				IsSilent = false;
+			}
         }
 
-        public Player(bool isAIPlayer, PlayStrategy playStrategy) : this(isAIPlayer)
+		public Player(bool isAIPlayer,bool isSilent, PlayStrategy playStrategy) : this(isAIPlayer, isSilent)
         {
             PlayStrategy = playStrategy;
         }
@@ -26,8 +32,9 @@ namespace SixtySix
         public int WinsCount { get; set; }
         public bool HasWonLastDeal { get; set; }
         public bool HasWonLastHand { get; set; }
-        public bool IsAIPlayer { get; set; }
-        public PlayStrategy PlayStrategy { get; set; }
+		public bool IsAIPlayer { get; set; }
+		public bool IsSilent { get; set; }
+		public PlayStrategy PlayStrategy { get; set; }
         public List<Card> ThrownCards { get; set; }
 
         public Card SelectedCard { get; set; }

@@ -35,9 +35,10 @@ namespace SixtySix
                     } while (!card.Suit.Equals(playedFromOther.Suit));
                 }
             }
-
-            Console.WriteLine("AI Hand: " + player.ToStringPlayerCards());
-            Console.WriteLine("AI has played: {0}", card);
+			if (!player.IsSilent) {
+				Console.WriteLine ("AI Hand: " + player.ToStringPlayerCards ());
+				Console.WriteLine ("AI has played: {0}", card);
+			}
             player.GiveCard(card);
 
             return card;

@@ -49,14 +49,18 @@ namespace SixtySixConsoleUI
             }
             while (player1.WinsCount < Constants.TOTAL_PLAYS_FOR_WIN && player2.WinsCount < Constants.TOTAL_PLAYS_FOR_WIN);
 
-            if (player1.WinsCount >= Constants.TOTAL_PLAYS_FOR_WIN){
-                Console.WriteLine("You has won!!! Result is: {0} to {1}.", player1.WinsCount, player2.WinsCount);
-                return player1;
-            }
-            else
-            {
-                Console.WriteLine("AI player has won!!! Result is: {0} to {1}.", player2.WinsCount, player1.WinsCount);
-                return player2;
+			if (player1.WinsCount >= Constants.TOTAL_PLAYS_FOR_WIN) {
+				if (!player1.IsSilent) {
+					Console.WriteLine ("You has won!!! Result is: {0} to {1}.", player1.WinsCount, player2.WinsCount);
+				}
+                
+				return player1;
+			} else {
+				if (!player2.IsSilent)
+				{
+					Console.WriteLine ("AI player has won!!! Result is: {0} to {1}.", player2.WinsCount, player1.WinsCount);
+				}
+				return player2;
             }
         }
 
@@ -71,12 +75,13 @@ namespace SixtySixConsoleUI
             int turnNumber = 1; 
             do
             {
-                Console.WriteLine("TURN: {0}", turnNumber++);
-                Console.WriteLine("TRUMP: {0}!!! {1} cards in the deck.", deck.Cards.Count() > 0 ? deck.Cards.Last().ToString() : deck.TrumpSuit.ToString(), deck.Cards.Count());
-                Console.WriteLine("-" + player1.ToString() + " has " + player1.Score + " points");
-                Console.WriteLine("-" + player2.ToString() + " has " + player2.Score + " points");
-                Console.WriteLine();
-
+				if(!(player1.IsSilent && player2.IsSilent)){
+	                Console.WriteLine("TURN: {0}", turnNumber++);
+	                Console.WriteLine("TRUMP: {0}!!! {1} cards in the deck.", deck.Cards.Count() > 0 ? deck.Cards.Last().ToString() : deck.TrumpSuit.ToString(), deck.Cards.Count());
+	                Console.WriteLine("-" + player1.ToString() + " has " + player1.Score + " points");
+	                Console.WriteLine("-" + player2.ToString() + " has " + player2.Score + " points");
+	                Console.WriteLine();
+				}
                 if (player1.HasWonLastHand) {
                     MakeTurn(player1, player2, deck);
                     
@@ -95,7 +100,9 @@ namespace SixtySixConsoleUI
                     }
                 }
 
-                Console.WriteLine("============================================================================="); 
+				if(!(player1.IsSilent && player2.IsSilent)){
+                	Console.WriteLine("============================================================================="); 
+				}
             } while (player1.Cards.Count() > 0 && player2.Cards.Count() > 0);
 
             CardsDeckUtil.CollectCardsInDeck(deck, player1, player2);
@@ -127,7 +134,10 @@ namespace SixtySixConsoleUI
             // player1 plays first, so if first card wins, then the first player wins
             if (SixtySixUtil.WinsFirstCard(card, otherCard, deck.TrumpSuit))
             {
-                Console.WriteLine("Winning card {0}", card);
+
+				if (!(player1.IsSilent && player2.IsSilent)) {
+					Console.WriteLine ("Winning card {0}", card);
+				}
                 player1.Score += handScore;
                 player1.HasWonLastHand = true;
                 player2.HasWonLastHand = false;
@@ -136,8 +146,11 @@ namespace SixtySixConsoleUI
             }
             else
             {
-                Console.WriteLine("Winning card {0}", otherCard);
-                player2.Score += handScore;
+
+				if (!(player1.IsSilent && player2.IsSilent)) {
+					Console.WriteLine ("Winning card {0}", otherCard);
+				}
+				player2.Score += handScore;
                 player2.HasWonLastHand = true;
                 player1.HasWonLastHand = false;
                 SixtySixUtil.DrawCard(player2, deck);

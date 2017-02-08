@@ -162,13 +162,17 @@ namespace SixtySix
 
         public static void CallTwenty(Player player)
         {
-            Console.WriteLine("--> Twenty! (+20)");
-            player.Score += Constants.TWENTY_ANNOUNCEMENT;
+			if (!player.IsSilent) {
+				Console.WriteLine ("--> Twenty! (+20)");
+			}
+			player.Score += Constants.TWENTY_ANNOUNCEMENT;
         }
 
         public static void CallForty(Player player)
         {
-            Console.WriteLine("--> Forty! (+40)");
+			if (!player.IsSilent) {
+				Console.WriteLine ("--> Forty! (+40)");
+			}
             player.Score += Constants.FORTY_ANNOUNCEMENT;
         }
 
@@ -292,7 +296,9 @@ namespace SixtySix
                 player.WinsCount += SixtySixUtil.GetNumberOfWins(other);
                 player.HasWonLastDeal = true;
                 other.HasWonLastDeal = false;
-                Console.WriteLine(player.ToString() + " has won!!");
+				if (!player.IsSilent) {
+					Console.WriteLine (player.ToString () + " has won!!");
+				}
                 return true;
             }
             else
