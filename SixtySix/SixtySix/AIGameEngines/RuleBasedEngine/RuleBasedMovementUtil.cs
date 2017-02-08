@@ -182,7 +182,7 @@ namespace SixtySix.RuleBasedEngine
             {
                 if (playerTrumps != null && playerTrumps.Count() > 0)
                 {
-                    if (playerTrumps.First(x => x.Value > playedFromOther.Value) != null)
+                    if (playerTrumps.FirstOrDefault(x => x.Value > playedFromOther.Value) != null)
                     {
                         return playerTrumps.Max();
                     }
@@ -200,7 +200,7 @@ namespace SixtySix.RuleBasedEngine
                 if(SixtySixUtil.HasAnsweringCard(player, playedFromOther)) {
                     var answeringCards = SixtySixUtil.GetHandAnsweringCards(player, playedFromOther);
 
-                    if (answeringCards.First(x => x.Value > playedFromOther.Value) != null)
+                    if (answeringCards.FirstOrDefault(x => x.Value > playedFromOther.Value) != null)
                     {
                         return player.Cards.Max();
                     }
