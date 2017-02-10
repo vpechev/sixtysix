@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SixtySix.enums;
 
 namespace SixtySix
 {
@@ -20,7 +21,7 @@ namespace SixtySix
             };
             while (!current.IsTerminal)
             {
-                List<Card> validMoves = current.Cards;
+                List<Card> validMoves = current.Hand;
 
                 if (validMoves.Count > current.Children.Count())
                     return Expand(current, deck, player);
@@ -43,37 +44,11 @@ namespace SixtySix
             {
                 BuildTree(current, deck, player);
             }
-            //return ChooseCardFromConfiguration(current);
+            
             return null;
 
 
-            //Copy current state to the game
-            //helper.CopyBytes(game.board, current.state);
-
-            //List<byte> validMoves = game.GetValidMoves(current.state);
-
-            //for (int i = 0; i < validMoves.Count; i++)
-            //{
-            //    //We already have evaluated this move
-            //    if (current.children.Exists(a => a.action == validMoves[i]))
-            //        continue;
-
-            //    int playerActing = Opponent(current.PlayerTookAction);
-
-            //    Node node = new Node(current, validMoves[i], playerActing);
-            //    current.children.Add(node);
-
-            //    //Do the move in the game and save it to the child node
-            //    game.Mark(playerActing, validMoves[i]);
-            //    helper.CopyBytes(node.state, game.board);
-
-            //    //Return to the previous game state
-            //    helper.CopyBytes(game.board, current.state);
-
-            //    return node;
-            //}
-
-            //throw new Exception("Error");
+            
         }
 
         /*
@@ -132,28 +107,28 @@ namespace SixtySix
 
         public static void BuildTree(Node node, Deck deck, Player player)
         {
-            var playerCards = node.Cards;
-            var rootNode = new Node();
+            //var playerCards = node.Hand;
+            //var rootNode = new Node();
 
             
-            foreach (var card in playerCards)
-            {
-                var availableCardsForOpponent = CardsDeckUtil.InitializeDeck().Cards; //all cards
-                availableCardsForOpponent.Remove(deck.Cards.Last());      // - deck.OpenedCard
-                player.Cards.ForEach(x=> availableCardsForOpponent.Remove(x) ); //- current player cards 
-                deck.ThrownCards.ForEach(x=> availableCardsForOpponent.Remove(x) ); //- deck.ThrownCards 
+            //foreach (var card in playerCards)
+            //{
+            //    var availableCardsForOpponent = CardsDeckUtil.InitializeDeck().Cards; //all cards
+            //    availableCardsForOpponent.Remove(deck.Cards.Last());      // - deck.OpenedCard
+            //    player.Cards.ForEach(x=> availableCardsForOpponent.Remove(x) ); //- current player cards 
+            //    deck.ThrownCards.ForEach(x=> availableCardsForOpponent.Remove(x) ); //- deck.ThrownCards 
                 
-                var currentNode = new Node()
-                {
-                    Cards = playerCards,
-                    ChoosenCard = card,
-                    OpenedDeckCard = deck.Cards.Last(),
-                    ThrownFromPlayerCards = player.ThrownCards,
-                    CanBePlayedFromOpponent = availableCardsForOpponent
-                };
-                rootNode.Children.Add(currentNode);
-                GenerateSubTree(currentNode, player);
-            }
+            //    var currentNode = new Node()
+            //    {
+            //        Cards = playerCards,
+            //        ChoosenCard = card,
+            //        OpenedDeckCard = deck.Cards.Last(),
+            //        ThrownFromPlayerCards = player.ThrownCards,
+            //        CanBePlayedFromOpponent = availableCardsForOpponent
+            //    };
+            //    rootNode.Children.Add(currentNode);
+            //    GenerateSubTree(currentNode, player);
+            //}
         }
 
         private static void GenerateSubTree(Node node, Player player)
@@ -169,7 +144,7 @@ namespace SixtySix
             node.CanBePlayedFromOpponent.Remove(newCard);
             player.Cards.Add(newCard);
             
-            GenerateSubTree(node, player);
+//            GenerateSubTree(node, player);
         }
 
         private static Node BestChildUCB(Node current, double C)
@@ -190,5 +165,159 @@ namespace SixtySix
 
             return bestChild;
         }
+
+        /*
+ * In the context of this method player1 has always win last game
+ * 
+ */
+        public static void PlayOneDeal(Deck deck, Player player1, Player player2)
+        {
+            //we have to deal the cards.
+            //SixtySixUtil.DealCards(deck, player1, player2);
+//            int turnNumber = 1;
+            do
+            {
+                //Console.WriteLine("TURN: {0}", turnNumber++);
+                //Console.WriteLine("TRUMP: {0}!!! {1} cards in the deck.", deck.Cards.Count() > 0 ? deck.Cards.Last().ToString() : deck.TrumpSuit.ToString(), deck.Cards.Count());
+                //Console.WriteLine("-" + player1.ToString() + " has " + player1.Score + " points");
+                //Console.WriteLine("-" + player2.ToString() + " has " + player2.Score + " points");
+                //Console.WriteLine();
+
+                if (player1.HasWonLastHand)
+                {
+                    MakeTurn(player1, player2, deck);
+
+                    if (SixtySixUtil.IsSixtySixReached(player1, player2))
+                    {
+                        break;
+                    }
+                }
+                else if (player2.HasWonLastHand)
+                {
+                    MakeTurn(player2, player1, deck);
+
+                    if (SixtySixUtil.IsSixtySixReached(player2, player1))
+                    {
+                        break;
+                    }
+                }
+
+  //              Console.WriteLine("=============================================================================");
+            } while (player1.Cards.Count() > 0 && player2.Cards.Count() > 0);
+
+ //           CardsDeckUtil.CollectCardsInDeck(deck, player1, player2);
+ //           Console.Clear();
+        }
+
+
+        private static void MakeTurn(Player player1, Player player2, Deck deck)
+        {
+            //give card
+            var card = AIMovementUtil.MakeTurn(player1, deck, null);
+
+            //Check for additional point -> (20 or 40)
+            //TODO Idea for modification: Player choose if he wants to call his announce. If has more than one announce can choose which one wants to play.
+            if (SixtySixUtil.HasForty(player1.Cards, card, deck))
+            {
+                SixtySixUtil.CallForty(player1);
+            }
+            else if (SixtySixUtil.HasTwenty(player1.Cards, card, deck))
+            {
+                SixtySixUtil.CallTwenty(player1);
+            }
+
+            var otherCard = AIMovementUtil.MakeTurn(player2, deck, card);
+            var handScore = (int)card.Value + (int)otherCard.Value;
+
+            deck.ThrownCards.Add(card);
+            deck.ThrownCards.Add(otherCard);
+
+            // player1 plays first, so if first card wins, then the first player wins
+            if (SixtySixUtil.WinsFirstCard(card, otherCard, deck.TrumpSuit))
+            {
+   //             Console.WriteLine("Winning card {0}", card);
+                player1.Score += handScore;
+                player1.HasWonLastHand = true;
+                player2.HasWonLastHand = false;
+                SixtySixUtil.DrawCard(player1, deck);
+                SixtySixUtil.DrawCard(player2, deck);
+            }
+            else
+            {
+     //           Console.WriteLine("Winning card {0}", otherCard);
+                player2.Score += handScore;
+                player2.HasWonLastHand = true;
+                player1.HasWonLastHand = false;
+                SixtySixUtil.DrawCard(player2, deck);
+                SixtySixUtil.DrawCard(player1, deck);
+            }
+        }
+
+        public List<Card> ValidMoves(Player player, Deck deck, Card playedFromOther)
+        {
+            List<Card> validMoves = new List<Card>();
+            foreach (var card in player.Cards)
+            {
+                //need to andswer
+                if (playedFromOther != null && SixtySixUtil.HasToAnswerWithMatching(deck))
+                {
+                    if (card.Suit.Equals(playedFromOther.Suit))
+                    {
+                        validMoves.Add(card);
+
+                    }
+
+                }
+            }
+            return validMoves;
+        }
+
+        public Card MCTS()
+        {
+            return null;
+        }
+
+        //from the current leaf with the thrown card generate the child node
+        public Node Action(Card card, Node parrent)
+        {
+            
+            List<Card> tmpCanBePlayedByOpponent = new List<Card>();
+            List<Card> tmpHand = new List<Card>();
+            List<Card> tmpAssignedOpponentCards = new List<Card>();
+            tmpHand = parrent.Hand;
+            tmpCanBePlayedByOpponent=parrent.CanBePlayedFromOpponent;
+            tmpAssignedOpponentCards = parrent.AssignedOpponentCards;
+            Card tmpTrownCard = new Card();
+            if (parrent.OurTurn)
+	        {
+                tmpHand.Remove(card);
+                tmpTrownCard = null;
+	        }
+            else
+            {
+                tmpAssignedOpponentCards.Remove(card);
+                tmpTrownCard = card;
+            }
+		 
+            Node child = new Node()
+            {
+                Parent=parrent,
+                Value=0,
+                VisitsCount=0,
+                Hand=tmpHand,
+                IsTerminal=false,
+                ThrumpCard=parrent.ThrumpCard,
+                CanBePlayedFromOpponent=tmpCanBePlayedByOpponent,
+                ThrownFromPlayersCards=parrent.ThrownFromPlayersCards,
+                CardOnTable=tmpTrownCard,
+                AssignedOpponentCards=tmpAssignedOpponentCards,
+                Opponent=parrent.Opponent,
+                Children=new List<Node>()
+            };
+            child.ThrownFromPlayersCards.Add(card);
+            child.AddCard(child.Hand);
+            return child;
+        }
+
     }
 }

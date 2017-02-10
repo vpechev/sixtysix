@@ -13,6 +13,7 @@ namespace SixtySix
         {
             Cards = new List<Card>();
             ThrownCards = new List<Card>();
+            HasTwentyForty = new List<Card>();
             IsAIPlayer = isAIPlayer;
 			IsSilent = isSilent;
 			if (!IsAIPlayer && IsSilent)
@@ -32,10 +33,11 @@ namespace SixtySix
         public int WinsCount { get; set; }
         public bool HasWonLastDeal { get; set; }
         public bool HasWonLastHand { get; set; }
-		public bool IsAIPlayer { get; set; }
-		public bool IsSilent { get; set; }
-		public PlayStrategy PlayStrategy { get; set; }
+	public bool IsAIPlayer { get; set; }
+	public bool IsSilent { get; set; }
+	public PlayStrategy PlayStrategy { get; set; }
         public List<Card> ThrownCards { get; set; }
+        public List<Card> HasTwentyForty { get; set; }
 
         public Card SelectedCard { get; set; }
 

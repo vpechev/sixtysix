@@ -25,24 +25,27 @@ namespace SixtySix
             return deck;
         }
 
-        public static void ShuffleDeck(Deck deck)
+        public static void ShuffleCards(List<Card> cards)
         {
-            Random rand = new Random(System.DateTime.Now.Millisecond);
 
-            deck.IsEndOfGame = false;
-            for (int i = deck.Cards.Count - 1; i > 0; --i)
+            Random rand = new Random(System.DateTime.Now.Millisecond);
+            for (int i = cards.Count - 1; i > 0; --i)
             {
                 int k = rand.Next(i + 1);
-                var temp = deck.Cards[i];
-                deck.Cards[i] = deck.Cards[k];
-                deck.Cards[k] = temp;
+                var temp = cards[i];
+                cards[i] = cards[k];
+                cards[k] = temp;
             }
+        }
+
+        public static void ShuffleDeck(Deck deck)
+        {
+            ShuffleCards(deck.Cards);
         }
 
         public static void SplitDeck(Deck deck, int index)
         {
             int cardsListCount = deck.Cards.Count;
-
             deck.IsEndOfGame = false;
 
             for (int i = 0; i < index; i++)

@@ -119,10 +119,12 @@ namespace SixtySixConsoleUI
             if (SixtySixUtil.HasForty(player1.Cards, card, deck))
             {
                 SixtySixUtil.CallForty(player1);
+                player1.HasTwentyForty.Add(new Card() { Suit = card.Suit, Value = card.Value == CardValue.QUEEN ? CardValue.KING : CardValue.QUEEN });
             }
             else if (SixtySixUtil.HasTwenty(player1.Cards, card, deck))
             {
                 SixtySixUtil.CallTwenty(player1);
+                player1.HasTwentyForty.Add(new Card() { Suit=card.Suit,Value=card.Value==CardValue.QUEEN?CardValue.KING:CardValue.QUEEN});
             }
 
             var otherCard = MovementUtil.MakeTurn(player2, player1, deck, card);
