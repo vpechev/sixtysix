@@ -38,16 +38,18 @@ namespace SixtySix
 			List<Card> hasAnons = Opponent.HasTwentyForty;
 			foreach (var card in hasAnons)
 			{
-				if (CanBePlayedFromOpponent.First(x => x.Value == card.Value && x.Suit == card.Suit) != null)
+				if (CanBePlayedFromOpponent != null &&
+					CanBePlayedFromOpponent.Count() !=0 &&
+					CanBePlayedFromOpponent.First(x => x.Value == card.Value && x.Suit == card.Suit) != null)
 				{
 					opponentsCards.Add(card);
 					CanBePlayedFromOpponent.Remove(card);
 				}
 			}
 			
-			while (opponentsCards.Count()<6)
+			while (opponentsCards.Count() < 6 && CanBePlayedFromOpponent.Count() > 0)
 			{
-				opponentsCards.Add(opponentsCards.First());
+				opponentsCards.Add(CanBePlayedFromOpponent.First());
 				CanBePlayedFromOpponent.Remove(opponentsCards.First());
 			}
 			return opponentsCards;
