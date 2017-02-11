@@ -82,7 +82,10 @@ namespace SixtySix
 
         private static Card GiveMCTSBasedCard(Player player, Deck deck, Card playedFromOther = null)
         {
-            return MCTSEngine.Select(deck, player, playedFromOther);
+			
+           // return MCTSEngine.Select(deck, player, playedFromOther);
+			//TODO : IMPLEMENT THIS.
+			return null;
         }
 
         public static int GetDeckSplittingIndex()

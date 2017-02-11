@@ -13,23 +13,12 @@ namespace SixtySix
          * Start from the root R and select successive child nodes down to the
          * leaf node L. We have to choose most promising moves 
          */
-        public static Card Select(Deck deck, Player player, Card playedFromOther=null)
+		public static Node Select(Node root)
         {
-            Node current = new Node()
-            {
-                
-            };
-            while (!current.IsTerminal)
-            {
-                List<Card> validMoves = current.Hand;
-
-                if (validMoves.Count > current.Children.Count())
-                    return Expand(current, deck, player);
-                else
-                    current = BestChildUCB(current, 1.44);
-            }
-
-            return current.ChoosenCard;
+			if (root.Children.Count () == 0)
+				return Action (root);
+			Node chosen = BestChildUCB (root, 1.44);
+			return Select (chosen);
         }
 
         /*
@@ -149,7 +138,21 @@ namespace SixtySix
 
         private static Node BestChildUCB(Node current, double C)
         {
-            Node bestChild = null;
+			Node bestChild = new Node()
+			{
+				Parent=current.Parent,
+				Value=0,
+				VisitsCount=0,
+				Hand=current.Hand,
+				IsTerminal=false,
+				ThrumpCard=current.ThrumpCard,
+				CanBePlayedFromOpponent=current.CanBePlayedFromOpponent,
+				ThrownFromPlayersCards=current.ThrownFromPlayersCards,
+				CardOnTable=current.CardOnTable,
+				AssignedOpponentCards=current.AssignedOpponentCards,
+				Opponent=current.Opponent,
+				Children=new List<Node>()
+			};
             double best = double.NegativeInfinity;
 
             foreach (Node child in current.Children)
@@ -278,23 +281,35 @@ namespace SixtySix
         }
 
         //from the current leaf with the thrown card generate the child node
-        public Node Action(Card card, Node parrent)
+        public static Node Action(Node parrent)
         {
             
             List<Card> tmpCanBePlayedByOpponent = new List<Card>();
             List<Card> tmpHand = new List<Card>();
             List<Card> tmpAssignedOpponentCards = new List<Card>();
             tmpHand = parrent.Hand;
-            tmpCanBePlayedByOpponent=parrent.CanBePlayedFromOpponent;
+            tmpCanBePlayedByOpponent = parrent.CanBePlayedFromOpponent;
             tmpAssignedOpponentCards = parrent.AssignedOpponentCards;
+			if (tmpAssignedOpponentCards.Count () == 0 && tmpCanBePlayedByOpponent.Count () > 6
+						&&parrent.OurTurn==false) 
+			{
+				parrent.AssignOponentsCards ();
+			}
+
+			Random rand = new Random (System.DateTime.Now.Millisecond);
             Card tmpTrownCard = new Card();
+			Card card = new Card ();
             if (parrent.OurTurn)
 	        {
+				card = parrent.Hand.ElementAt (rand.Next (parrent.Hand.Count()));
+						
                 tmpHand.Remove(card);
                 tmpTrownCard = null;
+
 	        }
             else
             {
+				card=parrent.AssignedOpponentCards.ElementAt(rand.Next(parrent.AssignedOpponentCards.Count()));
                 tmpAssignedOpponentCards.Remove(card);
                 tmpTrownCard = card;
             }

@@ -45,7 +45,7 @@ namespace SixtySix
                 }
             }
 
-            while (opponentsCards.Count<6)
+			while (opponentsCards.Count()<6)
             {
                 opponentsCards.Add(opponentsCards.First());
                 CanBePlayedFromOpponent.Remove(opponentsCards.First());
