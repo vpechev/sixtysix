@@ -10,7 +10,7 @@ namespace SixtySix
 {
     public class AIMovementUtil
     {
-        public static Card MakeTurn(Player player, Deck deck, Card playedFromOther=null)
+		public static Card MakeTurn(Player player, Player opp, Deck deck, Card playedFromOther=null)
         {
             if (playedFromOther == null && player.HasWonLastHand)
             {
@@ -21,7 +21,7 @@ namespace SixtySix
                 }
             }
 
-            Card card = GetAITurn(player, deck, playedFromOther); ;
+			Card card = GetAITurn(player,opp, deck, playedFromOther); ;
             
             //need to andswer
             if (playedFromOther != null && SixtySixUtil.HasToAnswerWithMatching(deck))
@@ -31,24 +31,25 @@ namespace SixtySix
                     do
                     {
                         Console.WriteLine("Wrong card to answer. The algorithm is trying again");
-                        card = GetAITurn(player, deck, playedFromOther);
+                        card = GetAITurn(player, opp, deck, playedFromOther);
                     } while (!card.Suit.Equals(playedFromOther.Suit));
                 }
             }
-
-            Console.WriteLine("AI Hand: " + player.ToStringPlayerCards());
-            Console.WriteLine("AI has played: {0}", card);
+			if (!player.IsSilent) {
+				Console.WriteLine ("AI Hand: " + player.ToStringPlayerCards ());
+				Console.WriteLine ("AI has played: {0}", card);
+			}
             player.GiveCard(card);
 
             return card;
         }
 
-        private static Card GetAITurn(Player player, Deck deck, Card playedFromOther = null)
+		private static Card GetAITurn(Player player,Player faggot, Deck deck, Card playedFromOther = null)
         {
             Card card = null;
             if (player.PlayStrategy == PlayStrategy.MCTS)
             {
-                card = GiveMCTSBasedCard(player, deck, playedFromOther);
+                card = GiveMCTSBasedCard(player, faggot,deck, playedFromOther);
             }
             else if (player.PlayStrategy == PlayStrategy.RuleBased)
             {
@@ -79,9 +80,12 @@ namespace SixtySix
             }
         }
 
-        private static Card GiveMCTSBasedCard(Player player, Deck deck, Card playedFromOther = null)
+		private static Card GiveMCTSBasedCard(Player player,Player faggot, Deck deck, Card playedFromOther = null)
         {
-            return MCTSEngine.Select(deck, player, playedFromOther);
+			
+           // return MCTSEngine.Select(deck, player, playedFromOther);
+			//TODO : IMPLEMENT THIS.
+			return MCTSEngine.MCTS(player, faggot, deck,playedFromOther);
         }
 
         public static int GetDeckSplittingIndex()

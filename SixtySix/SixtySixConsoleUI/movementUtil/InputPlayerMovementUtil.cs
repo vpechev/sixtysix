@@ -11,16 +11,17 @@ namespace SixtySixConsoleUI
     {
         public static Card MakeTurn(Player player, Deck deck, Card playedFromOther=null)
         {
-            Console.WriteLine();
-            if (playedFromOther != null)
-            {
-                Console.WriteLine("Other player played: " + playedFromOther);
-            }
-            Console.WriteLine("Your Hand: " + player.ToStringPlayerCards());
-            Card card = null;
+			if (!player.IsSilent) {
+				Console.WriteLine ();
+				if (playedFromOther != null) {
+					Console.WriteLine ("Other player played: " + playedFromOther);
+				}
+				Console.WriteLine ("Your Hand: " + player.ToStringPlayerCards ());
+			}
+			Card card = null;
             do
             {
-                Console.WriteLine("Ender the choosen card in format <<<cardValue cardSuit>>>");
+				Console.WriteLine("Ender the choosen card in format <<<cardValue cardSuit>>>");
                 String input = Console.ReadLine();
                 var parts = input.Split(null);
                 var value = ParseInputToCardValue(parts[0]);
