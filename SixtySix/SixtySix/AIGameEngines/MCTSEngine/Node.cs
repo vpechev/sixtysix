@@ -11,6 +11,7 @@ namespace SixtySix
         public Node()
         {
             Children = new List<Node>();
+			DetermineTerminal ();
         }
     
         public List<Card> Hand { get; set; }

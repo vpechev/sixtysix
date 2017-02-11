@@ -17,6 +17,8 @@ namespace SixtySix
         {
 			if (root.Children.Count () == 0)
 				return Action (root);
+			if (root.IsTerminal)
+				return root;
 			Node chosen = BestChildUCB (root, 1.44);
 			return Select (chosen);
         }

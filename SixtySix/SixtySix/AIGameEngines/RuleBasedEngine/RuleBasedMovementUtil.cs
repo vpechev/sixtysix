@@ -109,7 +109,7 @@ namespace SixtySix.RuleBasedEngine
 
         private static Card GiveCardIfOtherHasPlayedPhase1(Player player, Deck deck, Card playedFromOther)
         {
-            var rand = new Random(System.DateTime.Now.Millisecond);
+            //var rand = new Random(System.DateTime.Now.Millisecond);
             var playerCards = player.Cards;
             // if other player has played trump
             if (playedFromOther.Suit == deck.TrumpSuit)
@@ -174,7 +174,7 @@ namespace SixtySix.RuleBasedEngine
 
         private static Card GiveCardIfOtherHasPlayedPhase2(Player player, Deck deck, Card playedFromOther)
         {
-            var rand = new Random(System.DateTime.Now.Millisecond);
+            //var rand = new Random(System.DateTime.Now.Millisecond);
             var playerCards = player.Cards;
             var playerTrumps = playerCards.Where(x => x.Suit == playedFromOther.Suit);
             // if other player has played trump
