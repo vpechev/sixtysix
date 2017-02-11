@@ -182,7 +182,7 @@ namespace SixtySix.RuleBasedEngine
             //var rand = new Random(System.DateTime.Now.Millisecond);
             var playerCards = player.Cards;
             var playerTrumps = playerCards.Where(x => x.Suit == playedFromOther.Suit);
-
+          
             // if other player has played trump
             if (playedFromOther.Suit == deck.TrumpSuit)
             {

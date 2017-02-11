@@ -11,8 +11,8 @@ namespace SixtySix
         public Node()
         {
             Children = new List<Node>();
-			AlreadyUsedForChild = new List<Card> ();
-			DetermineTerminal ();
+			      AlreadyUsedForChild = new List<Card> ();
+			      DetermineTerminal ();
         }
     
         public List<Card> Hand { get; set; }
@@ -24,19 +24,18 @@ namespace SixtySix
         public Card CardOnTable { get; set; }
         public List<Card> CanBePlayedFromOpponent { get; set; }
 
-        public int Value { get; set; }                              //score from the trick
+        public int Value { get; set; } //score from the trick
         public int VisitsCount { get; set; }
         public List<Node> Children { get; set; }
         public Node Parent { get; set; }
         public Player Opponent { get; set; }
         public List<Card> AssignedOpponentCards { get; set; }
-		public List<Card> AlreadyUsedForChild { get; set; }
-		public int OurScore{ get; set; }
-
+		    public List<Card> AlreadyUsedForChild { get; set; }
+		    public int OurScore{ get; set; }
         public Boolean OurTurn { get; set; }
 
-		public List<Card> AssignOppCards(){
-			List<Card> opponentsCards=new List<Card>();
+		private List<Card> AssignOppCards() {
+			List<Card> opponentsCards = new List<Card>();
 			CardsDeckUtil.ShuffleCards(CanBePlayedFromOpponent);
 			List<Card> hasAnons = Opponent.HasTwentyForty;
 			foreach (var card in hasAnons)
@@ -65,11 +64,11 @@ namespace SixtySix
 			AssignedOpponentCards = AssignOppCards();
         }
 
-        public void AddChildren(Node node) 
-        {
-            Children.Add(node);
-            node.Parent=this;
-        }
+        //public void AddChildren(Node node) 
+        //{
+        //    Children.Add(node);
+        //    node.Parent=this;
+        //}
 
         public void DetermineTerminal()
         {
@@ -78,7 +77,6 @@ namespace SixtySix
                 IsTerminal = true;
             }
         }
-			
         public void AddCard(List<Card> hand)
         {
 			if (CanBePlayedFromOpponent.Count == 0)

@@ -161,7 +161,7 @@ namespace SixtySixDesktopUI.ViewModels
             bool winsFirstCard;
             if (this.Opponent.SelectedCard == null)
             {
-                var opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Deck, this.Player.SelectedCard.ToCard()));
+                var opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Player.ToPlayer(), this.Deck, this.Player.SelectedCard.ToCard()));
                 this.Opponent.SelectedCard = opponentCard;
                 winsFirstCard = SixtySixUtil.WinsFirstCard(this.Player.SelectedCard.ToCard(), this.Opponent.SelectedCard.ToCard(), this.Deck.TrumpSuit);
             }
@@ -246,7 +246,7 @@ namespace SixtySixDesktopUI.ViewModels
                     ChangeTrumpCardLogic(this.Opponent);
                 }
 
-                opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Deck));
+                opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Player.ToPlayer(), this.Deck));
                 this.Opponent.Cards.Remove(opponentCard);
 
 
