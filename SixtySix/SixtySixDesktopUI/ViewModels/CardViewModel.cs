@@ -38,6 +38,9 @@ namespace SixtySixDesktopUI.ViewModels
 
         public static CardViewModel ConvertToCardViewModel(Card card)
         {
+            if (card == null)
+                return null;
+
             return new CardViewModel()
             {
                 Value = card.Value,
@@ -50,7 +53,10 @@ namespace SixtySixDesktopUI.ViewModels
             var cards = new List<Card>();
             foreach (var card in cardsViewModels)
             {
-                cards.Add(card.ToCard());
+                if (card != null)
+                {
+                    cards.Add(card.ToCard());
+                }
             }
             return cards;
         }

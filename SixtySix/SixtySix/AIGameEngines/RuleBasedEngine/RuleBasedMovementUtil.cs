@@ -118,7 +118,7 @@ namespace SixtySix.RuleBasedEngine
                 {
                     return playerCards.First(x => x.Value == CardValue.ACE && x.Suit == playedFromOther.Suit);
                 }
-                return null;
+                return playerCards.Min();
             }
             else
             {
@@ -147,7 +147,12 @@ namespace SixtySix.RuleBasedEngine
                     }
                     else
                     {
-                        return playerCards.Where<Card>(x => x.Suit == deck.TrumpSuit).OrderBy(x=>x.Value).First();
+                        var card = playerCards.Where<Card>(x => x.Suit == deck.TrumpSuit).OrderBy(x=>x.Value).FirstOrDefault();
+                        if (card == null)
+                        {
+                            playerCards.Min();
+                        }
+                        return card;
                     }
                 }
                 else
@@ -165,7 +170,7 @@ namespace SixtySix.RuleBasedEngine
                             return loosingCards.Min();
                         }
 
-                        return null;
+                        return playerCards.Min();
                     }
                 }
             }
@@ -177,12 +182,17 @@ namespace SixtySix.RuleBasedEngine
             //var rand = new Random(System.DateTime.Now.Millisecond);
             var playerCards = player.Cards;
             var playerTrumps = playerCards.Where(x => x.Suit == playedFromOther.Suit);
+
+            if (playerCards.Count == 0)
+            {
+                int a = 6;
+            }
             // if other player has played trump
             if (playedFromOther.Suit == deck.TrumpSuit)
             {
                 if (playerTrumps != null && playerTrumps.Count() > 0)
                 {
-                    if (playerTrumps.First(x => x.Value > playedFromOther.Value) != null)
+                    if (playerTrumps.FirstOrDefault(x => x.Value > playedFromOther.Value) != null)
                     {
                         return playerTrumps.Max();
                     }
@@ -200,7 +210,7 @@ namespace SixtySix.RuleBasedEngine
                 if(SixtySixUtil.HasAnsweringCard(player, playedFromOther)) {
                     var answeringCards = SixtySixUtil.GetHandAnsweringCards(player, playedFromOther);
 
-                    if (answeringCards.First(x => x.Value > playedFromOther.Value) != null)
+                    if (answeringCards.FirstOrDefault(x => x.Value > playedFromOther.Value) != null)
                     {
                         return player.Cards.Max();
                     }
