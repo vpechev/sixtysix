@@ -18,7 +18,7 @@ namespace SixtySixDesktopUI.ViewModels
         public CardsBoardViewModel()
         {
             this.Player = new PlayerViewModel(false);
-            this.Opponent = new PlayerViewModel(true, PlayStrategy.Random);
+            this.Opponent = new PlayerViewModel(true, PlayStrategy.MCTS);
             this.Deck = CardsDeckUtil.InitializeDeck();
             CardsDeckUtil.ShuffleDeck(this.Deck);
             var player = this.Player.ToPlayer();

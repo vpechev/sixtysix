@@ -11,8 +11,12 @@ namespace SixtySix
         public Node()
         {
             Children = new List<Node>();
-			      AlreadyUsedForChild = new List<Card> ();
-			      DetermineTerminal ();
+            Hand = new List<Card>();
+			AlreadyUsedForChild = new List<Card> ();
+            CanBePlayedFromOpponent = new List<Card>();
+            ThrownFromPlayersCards = new List<Card>();
+            AssignedOpponentCards = new List<Card>();
+	        DetermineTerminal();
         }
     
         public List<Card> Hand { get; set; }
@@ -20,18 +24,16 @@ namespace SixtySix
         public List<Card> ThrownFromPlayersCards { get; set; }
         public Card ThrumpCard { get; set; }
         public bool IsTerminal { get; set; }
-
         public Card CardOnTable { get; set; }
         public List<Card> CanBePlayedFromOpponent { get; set; }
-
         public int Value { get; set; } //score from the trick
         public int VisitsCount { get; set; }
         public List<Node> Children { get; set; }
         public Node Parent { get; set; }
         public Player Opponent { get; set; }
         public List<Card> AssignedOpponentCards { get; set; }
-		    public List<Card> AlreadyUsedForChild { get; set; }
-		    public int OurScore{ get; set; }
+		public List<Card> AlreadyUsedForChild { get; set; }
+		public int OurScore{ get; set; }
         public Boolean OurTurn { get; set; }
 
 		private List<Card> AssignOppCards() {
@@ -42,7 +44,7 @@ namespace SixtySix
 			{
 				if (CanBePlayedFromOpponent != null &&
 					CanBePlayedFromOpponent.Count() !=0 &&
-					CanBePlayedFromOpponent.First(x => x.Value == card.Value && x.Suit == card.Suit) != null)
+					CanBePlayedFromOpponent.FirstOrDefault(x => x.Value == card.Value && x.Suit == card.Suit) != null)
 				{
 					opponentsCards.Add(card);
 					CanBePlayedFromOpponent.Remove(card);
@@ -57,18 +59,10 @@ namespace SixtySix
 			return opponentsCards;
 		}
 
-
-
 		public void AssignOponentsCards()
 		{
 			AssignedOpponentCards = AssignOppCards();
         }
-
-        //public void AddChildren(Node node) 
-        //{
-        //    Children.Add(node);
-        //    node.Parent=this;
-        //}
 
         public void DetermineTerminal()
         {
@@ -79,11 +73,16 @@ namespace SixtySix
         }
         public void AddCard(List<Card> hand)
         {
-			if (CanBePlayedFromOpponent.Count == 0)
+            if (CanBePlayedFromOpponent.Count == 0)
+            {
 				return;
+            }
+
 			List<Card> tmp = CanBePlayedFromOpponent;
-			foreach (var x in Parent.AlreadyUsedForChild) 
+            foreach (var x in Parent.AlreadyUsedForChild)
+            {
 				tmp.Remove (x);
+            } 
 			
             CardsDeckUtil.ShuffleCards(tmp);
             hand.Add(tmp.First());
