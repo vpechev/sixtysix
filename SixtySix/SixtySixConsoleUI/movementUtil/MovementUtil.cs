@@ -12,7 +12,7 @@ namespace SixtySixConsoleUI
         public static Card MakeTurn(Player player, Player other, Deck deck, Card playedFromOther=null)
         {
             if (player.IsAIPlayer)
-                return AIMovementUtil.MakeTurn(player, deck, playedFromOther);
+				return AIMovementUtil.MakeTurn(player, other, deck, playedFromOther);
             else
                 return InputPlayerMovementUtil.MakeTurn(player, deck, playedFromOther);
         }

@@ -31,26 +31,32 @@ namespace SixtySix
 
         public Boolean OurTurn { get; set; }
 
-        public void AssignOponentsCards()
-        {
-            List<Card> opponentsCards=new List<Card>();
-            CardsDeckUtil.ShuffleCards(CanBePlayedFromOpponent);
-            List<Card> hasAnons = Opponent.HasTwentyForty;
-            foreach (var card in hasAnons)
-            {
-                if (CanBePlayedFromOpponent.First(x => x.Value == card.Value && x.Suit == card.Suit) != null)
-                {
-                    opponentsCards.Add(card);
-                    CanBePlayedFromOpponent.Remove(card);
-                }
-            }
-
+		public List<Card> AssignOppCards(){
+			List<Card> opponentsCards=new List<Card>();
+			CardsDeckUtil.ShuffleCards(CanBePlayedFromOpponent);
+			List<Card> hasAnons = Opponent.HasTwentyForty;
+			foreach (var card in hasAnons)
+			{
+				if (CanBePlayedFromOpponent.First(x => x.Value == card.Value && x.Suit == card.Suit) != null)
+				{
+					opponentsCards.Add(card);
+					CanBePlayedFromOpponent.Remove(card);
+				}
+			}
+			
 			while (opponentsCards.Count()<6)
-            {
-                opponentsCards.Add(opponentsCards.First());
-                CanBePlayedFromOpponent.Remove(opponentsCards.First());
-            }
-            
+			{
+				opponentsCards.Add(opponentsCards.First());
+				CanBePlayedFromOpponent.Remove(opponentsCards.First());
+			}
+			return opponentsCards;
+		}
+
+
+
+		public void AssignOponentsCards()
+		{
+			AssignedOpponentCards = AssignOppCards();
         }
 
         public void AddChildren(Node node) 
