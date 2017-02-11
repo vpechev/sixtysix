@@ -13,33 +13,20 @@ namespace SixtySix
          * Start from the root R and select successive child nodes down to the
          * leaf node L. We have to choose most promising moves 
          */
-		public static Node Select(Node root)
+		private static Node Select(Node root)
         {
 			if (root.Children.Count () == 0)
 				return Action (root);
+
 			Node chosen = BestChildUCB (root, 1.44);
 			return Select (chosen);
         }
 
         /*
-         * unless L ends the game with a win/loss for either player, 
-         * either create one or more child nodes or choose from them node C
-         * 
-         * If L is a not a terminal node (i.e. it does not end the game) then create one or more child nodes and select one C.
-         
-        public static Card Expand(Node current, Deck deck, Player player)
-        {
-            Integrated in Selection
-
-
-            
-        }
-		*/
-        /*
          * play a random playout from node C. This step is sometimes also
          * called playout or rollout
          */
-        public static int Simulate(Node current)
+        private static int Simulate(Node current)
         {
 			Player playerOne = new Player (true, true, PlayStrategy.Random);
 			playerOne.Cards = current.Hand;
@@ -49,15 +36,15 @@ namespace SixtySix
 			{
 				Cards=current.CanBePlayedFromOpponent,
 				ThrownCards=current.ThrownFromPlayersCards,
-				IsClosed=false,
-				IsEndOfGame=false,
-				HasOpenedCard=true
+				IsClosed = false,
+				IsEndOfGame = false,
+				HasOpenedCard = true
 			};
 			deck.Cards.Add (current.ThrumpCard);
-			return MCTSEngine.PlayOneDeal (deck, playerOne, playerTwo);
+			return MCTSEngine.PlayOneDeal(deck, playerOne, playerTwo);
         }
 
-        public static void BackPropagate(Node current, int value)
+        private static void BackPropagate(Node current, int value)
         {
             do
             {
@@ -71,7 +58,6 @@ namespace SixtySix
 		private static double UCB(Node node,double cons)
 		{
 			return ((double)node.Value / (double)node.VisitsCount) + cons * Math.Sqrt((2.0 * Math.Log((double)node.Parent.VisitsCount)) / (double)node.VisitsCount);
-
 		}
 
         private static Node BestChildUCB(Node current, double C)
@@ -107,10 +93,10 @@ namespace SixtySix
         }
 
         /*
- * In the context of this method player1 has always win last game
- * 
- */
-        public static int PlayOneDeal(Deck deck, Player player1, Player player2)
+         * In the context of this method player1 has always win last game
+         * 
+         */
+        private static int PlayOneDeal(Deck deck, Player player1, Player player2)
         {
             
             do
@@ -138,7 +124,6 @@ namespace SixtySix
 			return player1.WinsCount - player2.WinsCount;
         }
 
-
         private static void MakeTurn(Player player1, Player player2, Deck deck)
         {
             //give card
@@ -164,7 +149,6 @@ namespace SixtySix
             // player1 plays first, so if first card wins, then the first player wins
             if (SixtySixUtil.WinsFirstCard(card, otherCard, deck.TrumpSuit))
             {
-   //             Console.WriteLine("Winning card {0}", card);
                 player1.Score += handScore;
                 player1.HasWonLastHand = true;
                 player2.HasWonLastHand = false;
@@ -173,7 +157,6 @@ namespace SixtySix
             }
             else
             {
-     //           Console.WriteLine("Winning card {0}", otherCard);
                 player2.Score += handScore;
                 player2.HasWonLastHand = true;
                 player1.HasWonLastHand = false;
@@ -182,75 +165,51 @@ namespace SixtySix
             }
         }
 
-        public List<Card> ValidMoves(Player player, Deck deck, Card playedFromOther)
-        {
-            List<Card> validMoves = new List<Card>();
-            foreach (var card in player.Cards)
-            {
-                //need to andswer
-                if (playedFromOther != null && SixtySixUtil.HasToAnswerWithMatching(deck))
-                {
-                    if (card.Suit.Equals(playedFromOther.Suit))
-                    {
-                        validMoves.Add(card);
-
-                    }
-
-                }
-            }
-            return validMoves;
-        }
-
-
         //from the current leaf with the thrown card generate the child node
-        public static Node Action(Node parrent)
+        private static Node Action(Node parrent)
         {
-            
             List<Card> tmpCanBePlayedByOpponent = new List<Card>();
             List<Card> tmpHand = new List<Card>();
             List<Card> tmpAssignedOpponentCards = new List<Card>();
-            tmpHand = parrent.Hand;
-            tmpCanBePlayedByOpponent = parrent.CanBePlayedFromOpponent;
-            tmpAssignedOpponentCards = parrent.AssignedOpponentCards;
-			if (tmpAssignedOpponentCards.Count () == 0 && tmpCanBePlayedByOpponent.Count () > 6
-						&&parrent.OurTurn==false) 
+            tmpHand.AddRange(parrent.Hand);
+            tmpCanBePlayedByOpponent.AddRange(parrent.CanBePlayedFromOpponent);
+            tmpAssignedOpponentCards.AddRange(parrent.AssignedOpponentCards);
+
+			if (tmpAssignedOpponentCards.Count () == 0 && tmpCanBePlayedByOpponent.Count () > 6 && parrent.OurTurn == false) 
 			{
-				parrent.AssignOponentsCards ();
+				parrent.AssignOponentsCards();
 			}
 
 			Random rand = new Random (System.DateTime.Now.Millisecond);
-            Card tmpTrownCard = new Card();
+            Card tmpTrownCard = null;
 			Card card = new Card ();
             if (parrent.OurTurn)
 	        {
-				card = parrent.Hand.ElementAt (rand.Next (parrent.Hand.Count()));
-						
+				card = parrent.Hand.ElementAt(rand.Next(parrent.Hand.Count()));
                 tmpHand.Remove(card);
-                tmpTrownCard = null;
-
 	        }
             else
             {
-				card=parrent.AssignedOpponentCards.ElementAt(rand.Next(parrent.AssignedOpponentCards.Count()));
+				card = parrent.AssignedOpponentCards.ElementAt(rand.Next(parrent.AssignedOpponentCards.Count()));
                 tmpAssignedOpponentCards.Remove(card);
                 tmpTrownCard = card;
             }
 		 
             Node child = new Node()
             {
-                Parent=parrent,
-                Value=0,
-                VisitsCount=0,
-                Hand=tmpHand,
-                IsTerminal=false,
-                ThrumpCard=parrent.ThrumpCard,
-                CanBePlayedFromOpponent=tmpCanBePlayedByOpponent,
-                ThrownFromPlayersCards=parrent.ThrownFromPlayersCards,
-                CardOnTable=tmpTrownCard,
-                AssignedOpponentCards=tmpAssignedOpponentCards,
-                Opponent=parrent.Opponent,
-                Children=new List<Node>(),
-				ChoosenCard=card
+                Parent = parrent,
+                Value = 0,
+                VisitsCount = 0,
+                Hand = tmpHand,
+                IsTerminal = false,
+                ThrumpCard = parrent.ThrumpCard,
+                CanBePlayedFromOpponent = tmpCanBePlayedByOpponent,
+                ThrownFromPlayersCards = parrent.ThrownFromPlayersCards,
+                CardOnTable = tmpTrownCard,
+                AssignedOpponentCards = tmpAssignedOpponentCards,
+                Opponent = parrent.Opponent,
+                Children = new List<Node>(),
+				ChoosenCard = card
             };
             child.ThrownFromPlayersCards.Add(card);
             child.AddCard(child.Hand);
@@ -263,40 +222,42 @@ namespace SixtySix
 			var tmpCanBePlayedByOpponent = new List<Card> ();
 			var tmpAssignedOpponentCards = new List<Card> ();
 
-			tmpCanBePlayedByOpponent.AddRange (deck.Cards);
-			tmpCanBePlayedByOpponent.AddRange (faggot.Cards);
-			tmpCanBePlayedByOpponent.Remove (deck.Cards.Last ());
-			tmpAssignedOpponentCards = new List<Card> ();
+			tmpCanBePlayedByOpponent.AddRange(deck.Cards);
+			tmpCanBePlayedByOpponent.AddRange(faggot.Cards);
+			tmpCanBePlayedByOpponent.Remove(deck.Cards.Last ());
+
+            //TODO We dont put any cards in tmpAssignedOpponentCards list, so it brokes down to the methods
+
 			Node root=new Node()
 			{
-				Parent=null,
-				Value=0,
-				VisitsCount=0,
-				Hand=AIPlayer.Cards,
-				IsTerminal=false,
-				ThrumpCard=deck.Cards.Last(),
-				CanBePlayedFromOpponent=tmpCanBePlayedByOpponent,
-				ThrownFromPlayersCards=deck.ThrownCards,
+				Parent = null,
+				Value = 0,
+				VisitsCount = 0,
+				Hand = AIPlayer.Cards,
+				IsTerminal = false,
+				ThrumpCard = deck.Cards.Last(),
+				CanBePlayedFromOpponent = tmpCanBePlayedByOpponent,
+				ThrownFromPlayersCards = deck.ThrownCards,
 				CardOnTable=cardOnTable,
-				AssignedOpponentCards=tmpAssignedOpponentCards,
-				Opponent=faggot,
-				Children=new List<Node>()
+				AssignedOpponentCards = tmpAssignedOpponentCards,
+				Opponent = faggot,
+				Children = new List<Node>()
 			};
 			var currTime = System.DateTime.Now.Millisecond;
 			var startTime = System.DateTime.Now.Millisecond;
 
-			while(currTime-startTime<1000)
+			while(currTime - startTime < 1000)
 			{
-				var current=Select (root);
+				var current = Select (root);
 
-				int value=Simulate (current);
-				BackPropagate (current, value);
+				int value = Simulate (current);
+				BackPropagate(current, value);
 				currTime = System.DateTime.Now.Millisecond;
-
 			}
 
 			double max = double.NegativeInfinity;;
 			Node tmpNode = null;
+
 			foreach (var child in root.Children) {
 				if (max < UCB (child, 1.44)) 
 				{
@@ -307,7 +268,5 @@ namespace SixtySix
 
 			return tmpNode.ChoosenCard;
 		}
-
-
     }
 }

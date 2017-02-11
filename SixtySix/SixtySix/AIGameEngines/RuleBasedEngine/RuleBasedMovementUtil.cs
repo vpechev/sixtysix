@@ -185,7 +185,7 @@ namespace SixtySix.RuleBasedEngine
 
             if (playerCards.Count == 0)
             {
-                int a = 6;
+                Console.WriteLine("DEBUG playercards = 0");
             }
             // if other player has played trump
             if (playedFromOther.Suit == deck.TrumpSuit)

@@ -9,7 +9,7 @@ namespace SixtySix
 {
     public class Player
     {
-		public Player(bool isAIPlayer=false, bool isSilent = true)
+		public Player(bool isAIPlayer=false, bool isSilent=true)
         {
             Cards = new List<Card>();
             ThrownCards = new List<Card>();
@@ -23,7 +23,7 @@ namespace SixtySix
 			}
         }
 
-		public Player(bool isAIPlayer,bool isSilent, PlayStrategy playStrategy) : this(isAIPlayer, isSilent)
+		public Player(bool isAIPlayer, bool isSilent, PlayStrategy playStrategy) : this(isAIPlayer, isSilent)
         {
             PlayStrategy = playStrategy;
         }

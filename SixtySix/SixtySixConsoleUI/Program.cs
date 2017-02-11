@@ -13,9 +13,9 @@ namespace SixtySixConsoleUI
         static void Main(string[] args)
         {
             //var player1 = new Player(); //human player
-            var player2 = new Player(true, PlayStrategy.Random); //random AI player
-            var player1 = new Player(true, PlayStrategy.RuleBased); //ES AI player
-            //var player2 = new Player(true, PlayStrategy.MCTS); //Monte Carlo AI player
+            //var player2 = new Player(true, PlayStrategy.Random); //random AI player
+            var player1 = new Player(true, false, PlayStrategy.RuleBased); //ES AI player
+            var player2 = new Player(true, false, PlayStrategy.MCTS); //Monte Carlo AI player
             GameEngine.PlaySixtySix(player1, player2);
             Console.ReadLine();
         }

@@ -22,7 +22,7 @@ namespace SixtySix
         public Card CardOnTable { get; set; }
         public List<Card> CanBePlayedFromOpponent { get; set; }
 
-        public int Value { get; set; }                              //score from the trick
+        public int Value { get; set; } //score from the trick
         public int VisitsCount { get; set; }
         public List<Node> Children { get; set; }
         public Node Parent { get; set; }
@@ -31,20 +31,20 @@ namespace SixtySix
 
         public Boolean OurTurn { get; set; }
 
-		public List<Card> AssignOppCards(){
-			List<Card> opponentsCards=new List<Card>();
+		private List<Card> AssignOppCards() {
+			List<Card> opponentsCards = new List<Card>();
 			CardsDeckUtil.ShuffleCards(CanBePlayedFromOpponent);
 			List<Card> hasAnons = Opponent.HasTwentyForty;
 			foreach (var card in hasAnons)
 			{
-				if (CanBePlayedFromOpponent.First(x => x.Value == card.Value && x.Suit == card.Suit) != null)
+				if (CanBePlayedFromOpponent.FirstOrDefault(x => x.Value == card.Value && x.Suit == card.Suit) != null)
 				{
 					opponentsCards.Add(card);
 					CanBePlayedFromOpponent.Remove(card);
 				}
 			}
 			
-			while (opponentsCards.Count()<6)
+			while (opponentsCards.Count() > 0 && opponentsCards.Count() < 6)
 			{
 				opponentsCards.Add(opponentsCards.First());
 				CanBePlayedFromOpponent.Remove(opponentsCards.First());
@@ -59,19 +59,19 @@ namespace SixtySix
 			AssignedOpponentCards = AssignOppCards();
         }
 
-        public void AddChildren(Node node) 
-        {
-            Children.Add(node);
-            node.Parent=this;
-        }
+        //public void AddChildren(Node node) 
+        //{
+        //    Children.Add(node);
+        //    node.Parent=this;
+        //}
 
-        public void DetermineTerminal()
-        {
-            if (Value == 66)
-            {
-                IsTerminal = true;
-            }
-        }
+        //public void DetermineTerminal()
+        //{
+        //    if (Value == 66)
+        //    {
+        //        IsTerminal = true;
+        //    }
+        //}
 
         public void AddCard(List<Card> hand)
         {
