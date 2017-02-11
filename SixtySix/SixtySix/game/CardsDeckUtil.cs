@@ -89,10 +89,10 @@ namespace SixtySix
                 deck.Cards.AddRange(player2.Cards);
             }
 
-            if (deck.Cards.Count() != Constants.DECK_COUNT)
-            {
-                throw new Exception("The number of cards in deck should be exactly 24.\nThrown by method CollectCardsInDeck.");
-            }
+            //if (deck.Cards.Count() != Constants.DECK_COUNT)
+            //{
+              //  throw new Exception("The number of cards in deck should be exactly 24.\nThrown by method CollectCardsInDeck.");
+            //}
         }
     }
 }

@@ -11,6 +11,7 @@ namespace SixtySix
         public Node()
         {
             Children = new List<Node>();
+			AlreadyUsedForChild = new List<Card> ();
 			DetermineTerminal ();
         }
     
@@ -29,6 +30,8 @@ namespace SixtySix
         public Node Parent { get; set; }
         public Player Opponent { get; set; }
         public List<Card> AssignedOpponentCards { get; set; }
+		public List<Card> AlreadyUsedForChild { get; set; }
+		public int OurScore{ get; set; }
 
         public Boolean OurTurn { get; set; }
 
@@ -70,18 +73,23 @@ namespace SixtySix
 
         public void DetermineTerminal()
         {
-            if (Value == 66)
+			if (OurScore == 66)
             {
                 IsTerminal = true;
             }
         }
-
+			
         public void AddCard(List<Card> hand)
         {
-            CardsDeckUtil.ShuffleCards(CanBePlayedFromOpponent);
-            hand.Add(CanBePlayedFromOpponent.First());
-            CanBePlayedFromOpponent.Remove(CanBePlayedFromOpponent.First());
-            
+			if (CanBePlayedFromOpponent.Count == 0)
+				return;
+			List<Card> tmp = CanBePlayedFromOpponent;
+			foreach (var x in Parent.AlreadyUsedForChild) 
+				tmp.Remove (x);
+			
+            CardsDeckUtil.ShuffleCards(tmp);
+            hand.Add(tmp.First());
+            CanBePlayedFromOpponent.Remove(tmp.First());
         }
     }
 }

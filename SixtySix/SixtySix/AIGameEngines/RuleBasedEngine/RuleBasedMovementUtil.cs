@@ -183,10 +183,6 @@ namespace SixtySix.RuleBasedEngine
             var playerCards = player.Cards;
             var playerTrumps = playerCards.Where(x => x.Suit == playedFromOther.Suit);
 
-            if (playerCards.Count == 0)
-            {
-                int a = 6;
-            }
             // if other player has played trump
             if (playedFromOther.Suit == deck.TrumpSuit)
             {
