@@ -18,7 +18,7 @@ namespace SixtySixDesktopUI.ViewModels
         public CardsBoardViewModel()
         {
             this.Player = new PlayerViewModel(false);
-            this.Opponent = new PlayerViewModel(true, PlayStrategy.RuleBased);
+            this.Opponent = new PlayerViewModel(true, PlayStrategy.Random);
             this.Deck = CardsDeckUtil.InitializeDeck();
             CardsDeckUtil.ShuffleDeck(this.Deck);
             var player = this.Player.ToPlayer();
@@ -158,15 +158,23 @@ namespace SixtySixDesktopUI.ViewModels
                 }
             }
 
+            bool winsFirstCard;
             if (this.Opponent.SelectedCard == null)
             {
                 var opponentCard = CardViewModel.ConvertToCardViewModel(AIMovementUtil.MakeTurn(this.Opponent.ToPlayer(), this.Deck, this.Player.SelectedCard.ToCard()));
                 this.Opponent.SelectedCard = opponentCard;
+                winsFirstCard = SixtySixUtil.WinsFirstCard(this.Player.SelectedCard.ToCard(), this.Opponent.SelectedCard.ToCard(), this.Deck.TrumpSuit);
+            }
+            else
+            {
+                winsFirstCard = !SixtySixUtil.WinsFirstCard(this.Opponent.SelectedCard.ToCard(), this.Player.SelectedCard.ToCard(), this.Deck.TrumpSuit);
             }
 
             var handScore = (int)this.Player.SelectedCard.Value + (int)this.Opponent.SelectedCard.Value;
 
-            if (!this.Opponent.HasWonLastHand && SixtySixUtil.WinsFirstCard(this.Player.SelectedCard.ToCard(), this.Opponent.SelectedCard.ToCard(), this.Deck.TrumpSuit))
+
+
+            if (winsFirstCard)
             {
                 this.Player.HasWonLastHand = true;
                 this.Opponent.HasWonLastHand = false;
@@ -322,13 +330,13 @@ namespace SixtySixDesktopUI.ViewModels
 
                 player.Cards = new ObservableCollection<CardViewModel>();
 
+                player.WinsCount += SixtySixUtil.GetNumberOfWins(opponent.ToPlayer());
                 player.Score = 0;
                 opponent.Score = 0;
                 this.TrumpCard = null;
                 player.SelectedCard = null;
                 opponent.SelectedCard = null;
                 
-                player.WinsCount += SixtySixUtil.GetNumberOfWins(opponent.ToPlayer());
                 player.HasWonLastDeal = true;
                 opponent.HasWonLastDeal = false;
                 player.ThrownCards = new ObservableCollection<CardViewModel>();
