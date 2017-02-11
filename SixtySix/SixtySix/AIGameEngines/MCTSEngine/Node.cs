@@ -11,6 +11,8 @@ namespace SixtySix
         public Node()
         {
             Children = new List<Node>();
+			      AlreadyUsedForChild = new List<Card> ();
+			      DetermineTerminal ();
         }
     
         public List<Card> Hand { get; set; }
@@ -28,7 +30,8 @@ namespace SixtySix
         public Node Parent { get; set; }
         public Player Opponent { get; set; }
         public List<Card> AssignedOpponentCards { get; set; }
-
+		    public List<Card> AlreadyUsedForChild { get; set; }
+		    public int OurScore{ get; set; }
         public Boolean OurTurn { get; set; }
 
 		private List<Card> AssignOppCards() {
@@ -37,16 +40,18 @@ namespace SixtySix
 			List<Card> hasAnons = Opponent.HasTwentyForty;
 			foreach (var card in hasAnons)
 			{
-				if (CanBePlayedFromOpponent.FirstOrDefault(x => x.Value == card.Value && x.Suit == card.Suit) != null)
+				if (CanBePlayedFromOpponent != null &&
+					CanBePlayedFromOpponent.Count() !=0 &&
+					CanBePlayedFromOpponent.First(x => x.Value == card.Value && x.Suit == card.Suit) != null)
 				{
 					opponentsCards.Add(card);
 					CanBePlayedFromOpponent.Remove(card);
 				}
 			}
 			
-			while (opponentsCards.Count() > 0 && opponentsCards.Count() < 6)
+			while (opponentsCards.Count() < 6 && CanBePlayedFromOpponent.Count() > 0)
 			{
-				opponentsCards.Add(opponentsCards.First());
+				opponentsCards.Add(CanBePlayedFromOpponent.First());
 				CanBePlayedFromOpponent.Remove(opponentsCards.First());
 			}
 			return opponentsCards;
@@ -65,20 +70,24 @@ namespace SixtySix
         //    node.Parent=this;
         //}
 
-        //public void DetermineTerminal()
-        //{
-        //    if (Value == 66)
-        //    {
-        //        IsTerminal = true;
-        //    }
-        //}
-
+        public void DetermineTerminal()
+        {
+			if (OurScore == 66)
+            {
+                IsTerminal = true;
+            }
+        }
         public void AddCard(List<Card> hand)
         {
-            CardsDeckUtil.ShuffleCards(CanBePlayedFromOpponent);
-            hand.Add(CanBePlayedFromOpponent.First());
-            CanBePlayedFromOpponent.Remove(CanBePlayedFromOpponent.First());
-            
+			if (CanBePlayedFromOpponent.Count == 0)
+				return;
+			List<Card> tmp = CanBePlayedFromOpponent;
+			foreach (var x in Parent.AlreadyUsedForChild) 
+				tmp.Remove (x);
+			
+            CardsDeckUtil.ShuffleCards(tmp);
+            hand.Add(tmp.First());
+            CanBePlayedFromOpponent.Remove(tmp.First());
         }
     }
 }

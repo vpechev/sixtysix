@@ -73,7 +73,10 @@ namespace SixtySix
                 }
                 else
                 {
-                    return player.Cards[rand.Next(0, player.Cards.Count)];
+					if (player.Cards.Count != 0)
+						return player.Cards [rand.Next (player.Cards.Count)];
+					else
+						return SixtySixUtil.DrawCard(player,deck);
                 }
             } else {
                 return player.Cards[rand.Next(0, player.Cards.Count)];
