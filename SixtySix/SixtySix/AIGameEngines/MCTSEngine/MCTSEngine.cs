@@ -136,6 +136,12 @@ namespace SixtySix
 //            GenerateSubTree(node, player);
         }
 
+		private static double UCB(Node node,double cons)
+		{
+			return ((double)node.Value / (double)node.VisitsCount) + cons * Math.Sqrt((2.0 * Math.Log((double)node.Parent.VisitsCount)) / (double)node.VisitsCount);
+
+		}
+
         private static Node BestChildUCB(Node current, double C)
         {
 			Node bestChild = new Node()
@@ -157,8 +163,7 @@ namespace SixtySix
 
             foreach (Node child in current.Children)
             {
-                double UCB1 = ((double)child.Value / (double)child.VisitsCount) + C * Math.Sqrt((2.0 * Math.Log((double)current.VisitsCount)) / (double)child.VisitsCount);
-
+				double UCB1 = UCB (child,C);
                 if (UCB1 > best)
                 {
                     bestChild = child;
@@ -275,10 +280,6 @@ namespace SixtySix
             return validMoves;
         }
 
-        public Card MCTS()
-        {
-            return null;
-        }
 
         //from the current leaf with the thrown card generate the child node
         public static Node Action(Node parrent)
@@ -333,6 +334,58 @@ namespace SixtySix
             child.AddCard(child.Hand);
             return child;
         }
+
+
+		public Card MCTS(Player AIPlayer, Player faggot, Deck deck,Card cardOnTable)
+		{
+			var tmpCanBePlayedByOpponent = new List<Card> ();
+			var tmpAssignedOpponentCards = new List<Card> ();
+
+			tmpCanBePlayedByOpponent.AddRange (deck.Cards);
+			tmpCanBePlayedByOpponent.AddRange (faggot.Cards);
+			tmpCanBePlayedByOpponent.Remove (deck.Cards.Last ());
+			tmpAssignedOpponentCards = new List<Card> ();
+			Node root=new Node()
+			{
+				Parent=null,
+				Value=0,
+				VisitsCount=0,
+				Hand=AIPlayer.Cards,
+				IsTerminal=false,
+				ThrumpCard=deck.Cards.Last(),
+				CanBePlayedFromOpponent=tmpCanBePlayedByOpponent,
+				ThrownFromPlayersCards=deck.ThrownCards,
+				CardOnTable=cardOnTable,
+				AssignedOpponentCards=tmpAssignedOpponentCards,
+				Opponent=faggot,
+				Children=new List<Node>()
+			};
+			var currTime = System.DateTime.Now.Millisecond;
+			var startTime = System.DateTime.Now.Millisecond;
+
+			while(currTime-startTime<1000)
+			{
+				Select (root);
+				Expand (null, null, null);
+				Simulate (null);
+				BackPropagate (null, 0);
+				currTime = System.DateTime.Now.Millisecond;
+
+			}
+
+			double max = -1;
+			Node tmpNode = null;;
+			foreach (var child in root.Children) {
+				if (max < UCB (child, 1.44)) 
+				{
+					tmpNode = child;
+					max = UCB (child, 1.44);
+				}
+			}
+
+			return tmpNode.ChoosenCard;
+		}
+
 
     }
 }
